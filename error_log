@@ -1,0 +1,15 @@
+[07-Sep-2026 03:17:52 UTC] PHP Warning:  Constant WP_DEBUG already defined in /home/amngfszdlp/epifservices.com/wp-config.php on line 91
+[17-Sep-2026 04:27:39 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "ABSPATH" in /home/amngfszdlp/epifservices.com/wp-settings.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/amngfszdlp/epifservices.com/wp-settings.php on line 34
+[17-Sep-2026 19:47:18 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "ABSPATH" in /home/amngfszdlp/epifservices.com/wp-settings.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/amngfszdlp/epifservices.com/wp-settings.php on line 34
+[17-Sep-2026 19:47:25 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "ABSPATH" in /home/amngfszdlp/epifservices.com/wp-settings.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/amngfszdlp/epifservices.com/wp-settings.php on line 34
+[18-Sep-2026 02:43:13 UTC] PHP Warning:  Constant WP_DEBUG already defined in /home/amngfszdlp/epifservices.com/wp-config.php on line 91
+[23-Sep-2026 22:30:27 UTC] PHP Warning:  Constant WP_DEBUG already defined in /home/amngfszdlp/epifservices.com/wp-config.php on line 91
