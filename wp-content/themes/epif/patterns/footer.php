@@ -19,6 +19,18 @@ $epif_links    = class_exists( 'EPIF_Legal' ) ? EPIF_Legal::links() : array();
 ?>
 <!-- wp:group {"tagName":"footer","align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|40","left":"var:preset|spacing|50","right":"var:preset|spacing|50"},"blockGap":"var:preset|spacing|30"},"border":{"top":{"color":"var:preset|color|accent-2","width":"1px"}}},"fontSize":"small","layout":{"type":"constrained","contentSize":"1200px"}} -->
 <footer class="wp-block-group alignfull has-small-font-size" style="border-top-color:var(--wp--preset--color--accent-2);border-top-width:1px;padding-top:var(--wp--preset--spacing--50);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--50)">
+	<!-- wp:html -->
+	<nav class="epif-areas" aria-label="<?php esc_attr_e( 'Service areas', 'epif' ); ?>">
+		<img src="<?php echo esc_url( epif_logo_url() ); ?>" alt="" width="64" height="64">
+		<ul>
+			<?php foreach ( epif_places() as $epif_slug => $epif_place ) : ?>
+				<li><a href="<?php echo esc_url( home_url( '/junk-removal/' . $epif_slug . '/' ) ); ?>"><?php echo esc_html( $epif_place[0] . ', ' . $epif_place[1] ); ?></a></li>
+			<?php endforeach; ?>
+			<li><?php esc_html_e( 'Virginia: coming soon', 'epif' ); ?></li>
+		</ul>
+		<p class="epif-small"><a href="https://epifservices.shop"><?php esc_html_e( 'Shop', 'epif' ); ?></a> · <a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'Blog', 'epif' ); ?></a> · <a href="<?php echo esc_url( home_url( '/about/' ) ); ?>"><?php esc_html_e( 'About us', 'epif' ); ?></a> · <button type="button" class="epif-linkbtn" data-epif-zip-toggle><?php esc_html_e( 'Change ZIP', 'epif' ); ?></button> · <?php esc_html_e( 'Location lookup uses GeoLite2 data created by MaxMind, available from', 'epif' ); ?> <a href="https://www.maxmind.com">maxmind.com</a>.</p>
+	</nav>
+	<!-- /wp:html -->
 	<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"top"}} -->
 	<div class="wp-block-group">
 		<!-- wp:group {"style":{"spacing":{"blockGap":"0.25rem"}},"layout":{"type":"flex","orientation":"vertical"}} -->

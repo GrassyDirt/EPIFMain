@@ -4,37 +4,118 @@
 	"settings": {
 		"color": {
 			"palette": [
-				{ "color": "#FFFFFF", "name": "Base", "slug": "base" },
-				{ "color": "#0F172A", "name": "Contrast", "slug": "contrast" },
-				{ "color": "#F1F5F9", "name": "Accent 1", "slug": "accent-1" },
-				{ "color": "#E2E8F0", "name": "Accent 2", "slug": "accent-2" },
-				{ "color": "#1D4ED8", "name": "Accent 3", "slug": "accent-3" },
-				{ "color": "#475569", "name": "Accent 4", "slug": "accent-4" },
-				{ "color": "#FFFFFF", "name": "Accent 5", "slug": "accent-5" },
-				{ "color": "#0F172A33", "name": "Accent 6", "slug": "accent-6" }
+				{
+					"color": "#F5F0E6",
+					"name": "Paper",
+					"slug": "base"
+				},
+				{
+					"color": "#1E1D1A",
+					"name": "Ink",
+					"slug": "contrast"
+				},
+				{
+					"color": "#FBF8F2",
+					"name": "Paper light",
+					"slug": "accent-1"
+				},
+				{
+					"color": "#DCD3C3",
+					"name": "Line",
+					"slug": "accent-2"
+				},
+				{
+					"color": "#1F63B0",
+					"name": "EPIF blue",
+					"slug": "accent-3"
+				},
+				{
+					"color": "#57524A",
+					"name": "Muted",
+					"slug": "accent-4"
+				},
+				{
+					"color": "#FFFFFF",
+					"name": "White",
+					"slug": "accent-5"
+				},
+				{
+					"color": "#3E7A1F",
+					"name": "EPIF green",
+					"slug": "accent-6"
+				},
+				{
+					"color": "#123A66",
+					"name": "Navy",
+					"slug": "navy"
+				}
 			]
 		},
 		"layout": {
 			"contentSize": "720px",
 			"wideSize": "1200px"
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"name": "Archivo",
+					"slug": "display",
+					"fontFamily": "Archivo, \"Arial Narrow\", sans-serif"
+				},
+				{
+					"name": "Public Sans",
+					"slug": "body",
+					"fontFamily": "\"Public Sans\", system-ui, sans-serif"
+				}
+			]
 		}
 	},
 	"styles": {
 		"elements": {
 			"button": {
-				"color": { "background": "var:preset|color|accent-3", "text": "var:preset|color|base" },
-				"border": { "radius": "6px" },
+				"color": {
+					"background": "var:preset|color|accent-3",
+					"text": "var:preset|color|base"
+				},
+				"border": {
+					"radius": "10px"
+				},
 				":hover": {
-					"color": { "background": "var:preset|color|contrast", "text": "var:preset|color|base" }
+					"color": {
+						"background": "var:preset|color|contrast",
+						"text": "var:preset|color|base"
+					}
+				}
+			},
+			"heading": {
+				"typography": {
+					"fontFamily": "var:preset|font-family|display",
+					"fontWeight": "800"
 				}
 			}
+		},
+		"typography": {
+			"fontFamily": "var:preset|font-family|body"
+		},
+		"color": {
+			"background": "var:preset|color|base",
+			"text": "var:preset|color|contrast"
 		}
 	},
 	"customTemplates": [
 		{
 			"name": "page-landing",
 			"title": "Landing Page",
-			"postTypes": [ "page" ]
+			"postTypes": [
+				"page"
+			]
+		},
+		{
+			"name": "page-about",
+			"title": "About Us",
+			"postTypes": [
+				"page"
+			]
 		}
 	]
 }

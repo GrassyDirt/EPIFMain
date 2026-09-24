@@ -10,6 +10,16 @@ epifservices.com — WordPress site.
 | `wp-content/themes/epif/` | Child theme of Twenty Twenty-Five: coming-soon page, site footer, **Landing Page** template, EPIF block patterns. |
 | `wp-config.php` | EPIF-tuned settings. Secrets are loaded from `wp-config-local.php` (never committed). |
 
+## Landing page (theme v1.2)
+
+- **Home page:** `templates/front-page.html` renders `patterns/home.php`: location strip, hero with trust row, services, pricing table, instant estimate, quote form, where it goes, tokens, partners, listing tool pre-order interest, FAQ (with FAQPage JSON-LD). Set **Settings → Reading → Your homepage displays → A static page** (any page) or leave "latest posts"; `front-page.html` is used either way.
+- **Prices:** edit `epif_prices()` in `wp-content/themes/epif/functions.php` (or the `epif_prices` filter). `null` shows "Ask" and keeps the item out of the instant estimate.
+- **Towns and ZIPs:** `epif_places()` and `epif_zip_map()` in the same file. Rural towns show Barn Revitalization first; the others hide it.
+- **Personalization:** `assets/site.js` swaps the headline, price column and services only after a visitor enters a ZIP (kept in their browser). Search engines always get the default all-areas page. The IP lookup (`geo.php` with GeoLite2) is not built yet.
+- **Blog:** write posts in **Posts → Add New**. `templates/single.html` adds the category, author, date, featured image and a "Get a quote" band. In the editor, insert the **EPIF diversion receipt** pattern for job stories. Set **Settings → Permalinks** to `/blog/%postname%/` and create a "Blog" page as the posts page.
+- **About Us:** create a page with slug `about` and choose the **About Us** template. Put the founding story and team in the page content.
+- **Phone:** header, hero and sticky mobile bar use the phone from **Settings → EPIF Business Info**.
+
 ## Server setup
 
 1. Copy `wp-config-local-sample.php` to `wp-config-local.php` — preferably one directory **above** the web root — and fill in the DB credentials and fresh salts from https://api.wordpress.org/secret-key/1.1/salt/.
