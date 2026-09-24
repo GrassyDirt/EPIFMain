@@ -1,0 +1,40 @@
+{
+	"$schema": "https://schemas.wp.org/wp/6.7/theme.json",
+	"version": 3,
+	"settings": {
+		"color": {
+			"palette": [
+				{ "color": "#FFFFFF", "name": "Base", "slug": "base" },
+				{ "color": "#0F172A", "name": "Contrast", "slug": "contrast" },
+				{ "color": "#F1F5F9", "name": "Accent 1", "slug": "accent-1" },
+				{ "color": "#E2E8F0", "name": "Accent 2", "slug": "accent-2" },
+				{ "color": "#1D4ED8", "name": "Accent 3", "slug": "accent-3" },
+				{ "color": "#475569", "name": "Accent 4", "slug": "accent-4" },
+				{ "color": "#FFFFFF", "name": "Accent 5", "slug": "accent-5" },
+				{ "color": "#0F172A33", "name": "Accent 6", "slug": "accent-6" }
+			]
+		},
+		"layout": {
+			"contentSize": "720px",
+			"wideSize": "1200px"
+		}
+	},
+	"styles": {
+		"elements": {
+			"button": {
+				"color": { "background": "var:preset|color|accent-3", "text": "var:preset|color|base" },
+				"border": { "radius": "6px" },
+				":hover": {
+					"color": { "background": "var:preset|color|contrast", "text": "var:preset|color|base" }
+				}
+			}
+		}
+	},
+	"customTemplates": [
+		{
+			"name": "page-landing",
+			"title": "Landing Page",
+			"postTypes": [ "page" ]
+		}
+	]
+}
