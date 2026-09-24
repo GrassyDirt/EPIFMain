@@ -14,33 +14,6 @@ class EPIF_Lead_Form {
 
 	public static function init() {
 		add_shortcode( 'epif_lead_form', array( __CLASS__, 'render' ) );
-		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_assets' ) );
-		add_filter( 'render_block_core/shortcode', array( __CLASS__, 'expand_in_block' ) );
-	}
-
-	/**
-	 * Block templates expand patterns after do_shortcode() has run, so a Shortcode block
-	 * inside a template pattern would otherwise print the raw [epif_lead_form] text.
-	 */
-	public static function expand_in_block( $content ) {
-		if ( false === strpos( $content, '[epif_lead_form' ) ) {
-			return $content;
-		}
-		return do_shortcode( shortcode_unautop( trim( $content ) ) );
-	}
-
-	public static function register_assets() {
-		$base = content_url( 'mu-plugins/epif-core/assets/' );
-		wp_register_script( 'epif-lead-form', $base . 'lead-form.js', array(), EPIF_CORE_VERSION, array( 'strategy' => 'defer', 'in_footer' => true ) );
-		wp_localize_script(
-			'epif-lead-form',
-			'EPIF_LEAD',
-			array(
-				'endpoint' => esc_url_raw( rest_url( EPIF_Lead_API::NAMESPACE_V1 . '/leads' ) ),
-				'tokenUrl' => esc_url_raw( rest_url( EPIF_Lead_API::NAMESPACE_V1 . '/token' ) ),
-			)
-		);
-		wp_register_style( 'epif-lead-form', $base . 'lead-form.css', array(), EPIF_CORE_VERSION );
 	}
 
 	public static function render( $atts ) {
@@ -53,15 +26,14 @@ class EPIF_Lead_Form {
 			'epif_lead_form'
 		);
 
-		wp_enqueue_script( 'epif-lead-form' );
-		wp_enqueue_style( 'epif-lead-form' );
+		EPIF_Forms::enqueue();
 
 		$services = array_filter( array_map( 'trim', explode( '|', $atts['services'] ) ) );
 		$uid      = wp_unique_id( 'epif-lead-' );
 
 		ob_start();
 		?>
-		<form class="epif-lead-form" id="<?php echo esc_attr( $uid ); ?>" novalidate>
+		<form class="epif-form epif-lead-form" id="<?php echo esc_attr( $uid ); ?>" data-epif-endpoint="leads" data-epif-event="generate_lead" novalidate>
 			<div class="epif-field">
 				<label for="<?php echo esc_attr( $uid ); ?>-name"><?php esc_html_e( 'Name', 'epif' ); ?> <span aria-hidden="true">*</span></label>
 				<input id="<?php echo esc_attr( $uid ); ?>-name" name="name" type="text" autocomplete="name" required maxlength="100">

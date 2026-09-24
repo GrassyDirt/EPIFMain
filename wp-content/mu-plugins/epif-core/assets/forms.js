@@ -1,17 +1,24 @@
 /**
- * EPIF lead form: submits to /wp-json/epif/v1/leads without a page reload.
+ * EPIF forms: submits any <form class="epif-form" data-epif-endpoint="…"> to
+ * /wp-json/epif/v1/<endpoint> without a page reload.
  */
 ( function () {
 	'use strict';
 
-	var cfg = window.EPIF_LEAD;
+	var cfg = window.EPIF_FORMS;
 	if ( ! cfg ) {
 		return;
 	}
 
 	var loadedAt = Math.floor( Date.now() / 1000 );
 
-	// Carry campaign parameters from the landing URL into the lead.
+	// Conversion events fired on success, when the matching tag is installed.
+	var EVENTS = {
+		generate_lead: { gtag: 'generate_lead', fbq: 'Lead' },
+		sign_up: { gtag: 'sign_up', fbq: 'CompleteRegistration' },
+	};
+
+	// Carry campaign parameters from the landing URL into the submission.
 	function utm() {
 		var params = new URLSearchParams( window.location.search );
 		var keys = [ 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid' ];
@@ -46,6 +53,19 @@
 		}
 	}
 
+	function track( name ) {
+		var ev = EVENTS[ name ];
+		if ( ! ev ) {
+			return;
+		}
+		if ( typeof window.gtag === 'function' ) {
+			window.gtag( 'event', ev.gtag );
+		}
+		if ( typeof window.fbq === 'function' ) {
+			window.fbq( 'track', ev.fbq );
+		}
+	}
+
 	function submit( form ) {
 		var button = form.querySelector( 'button[type="submit"]' );
 		clearErrors( form );
@@ -58,7 +78,7 @@
 				}
 			} );
 			markErrors( form, invalid );
-			setStatus( form, 'Please fill in the required fields.', true );
+			setStatus( form, 'Please complete the highlighted fields.', true );
 			return;
 		}
 
@@ -73,10 +93,10 @@
 		button.disabled = true;
 		setStatus( form, 'Sending…' );
 
-		fetch( cfg.tokenUrl, { credentials: 'same-origin', cache: 'no-store' } )
+		fetch( cfg.restBase + 'token', { credentials: 'same-origin', cache: 'no-store' } )
 			.then( function ( r ) { return r.json(); } )
 			.then( function ( t ) {
-				return fetch( cfg.endpoint, {
+				return fetch( cfg.restBase + form.dataset.epifEndpoint, {
 					method: 'POST',
 					credentials: 'same-origin',
 					headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': t.nonce },
@@ -90,21 +110,15 @@
 				if ( res.ok ) {
 					form.reset();
 					setStatus( form, res.body.message );
-					form.dispatchEvent( new CustomEvent( 'epif:lead', { bubbles: true } ) );
-					// Conversion tracking hooks (fire only if the tag is installed).
-					if ( typeof window.gtag === 'function' ) {
-						window.gtag( 'event', 'generate_lead' );
-					}
-					if ( typeof window.fbq === 'function' ) {
-						window.fbq( 'track', 'Lead' );
-					}
+					form.dispatchEvent( new CustomEvent( 'epif:success', { bubbles: true } ) );
+					track( form.dataset.epifEvent );
 				} else {
 					markErrors( form, res.body.data && res.body.data.fields );
 					setStatus( form, res.body.message || 'Something went wrong. Please try again.', true );
 				}
 			} )
 			.catch( function () {
-				setStatus( form, 'Network error. Please try again or contact us directly.', true );
+				setStatus( form, 'Network error. Please try again.', true );
 			} )
 			.finally( function () {
 				button.disabled = false;
@@ -112,7 +126,7 @@
 	}
 
 	document.addEventListener( 'submit', function ( e ) {
-		var form = e.target.closest( '.epif-lead-form' );
+		var form = e.target.closest( '.epif-form[data-epif-endpoint]' );
 		if ( form ) {
 			e.preventDefault();
 			submit( form );

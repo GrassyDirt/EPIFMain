@@ -4,8 +4,8 @@
  *
  *   POST /wp-json/epif/v1/leads
  *
- * Spam protection: WP nonce, honeypot field, minimum fill time, per-IP rate limit,
- * and Akismet (if active and configured).
+ * Spam protection: EPIF_Guard (nonce, honeypot, fill time, per-IP rate limit)
+ * plus Akismet when it is active and configured.
  *
  * @package EPIF_Core
  */
@@ -14,34 +14,19 @@ defined( 'ABSPATH' ) || exit;
 
 class EPIF_Lead_API {
 
-	const NAMESPACE_V1  = 'epif/v1';
-	const MIN_FILL_SECS = 3;
-
 	public static function init() {
 		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
 	}
 
 	public static function register_routes() {
-		// Fresh nonce for the form. Fetched by JS on submit so full-page caching
-		// (LiteSpeed / SpeedyCache) never serves an expired nonce baked into HTML.
 		register_rest_route(
-			self::NAMESPACE_V1,
-			'/token',
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => array( __CLASS__, 'token' ),
-				'permission_callback' => '__return_true',
-			)
-		);
-
-		register_rest_route(
-			self::NAMESPACE_V1,
+			EPIF_Guard::REST_NAMESPACE,
 			'/leads',
 			array(
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => array( __CLASS__, 'handle' ),
 				'permission_callback' => '__return_true', // Public form; verified in handle().
-				'args'                => array(
+				'args'                => EPIF_Guard::trap_args() + array(
 					'name'       => array( 'type' => 'string', 'required' => true, 'sanitize_callback' => 'sanitize_text_field' ),
 					'email'      => array( 'type' => 'string', 'required' => true, 'sanitize_callback' => 'sanitize_email' ),
 					'phone'      => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
@@ -50,18 +35,9 @@ class EPIF_Lead_API {
 					'message'    => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_textarea_field' ),
 					'source_url' => array( 'type' => 'string', 'sanitize_callback' => 'esc_url_raw' ),
 					'utm'        => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
-					'website'    => array( 'type' => 'string' ), // Honeypot: must stay empty.
-					'ts'         => array( 'type' => 'integer' ), // Form render time (unix seconds).
 				),
 			)
 		);
-	}
-
-	public static function token() {
-		$response = new WP_REST_Response( array( 'nonce' => wp_create_nonce( 'wp_rest' ) ) );
-		$response->header( 'Cache-Control', 'no-store, private, max-age=0' );
-		$response->header( 'X-LiteSpeed-Cache-Control', 'no-cache' );
-		return $response;
 	}
 
 	/**
@@ -69,21 +45,17 @@ class EPIF_Lead_API {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public static function handle( WP_REST_Request $request ) {
-		$nonce = $request->get_header( 'x_wp_nonce' );
-		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			return new WP_Error( 'epif_bad_nonce', __( 'Your session expired. Please refresh the page and try again.', 'epif' ), array( 'status' => 403 ) );
+		$error = EPIF_Guard::check_nonce( $request );
+		if ( $error ) {
+			return $error;
 		}
 
-		// Bots: honeypot filled or form submitted implausibly fast. Pretend success so they move on.
-		$ts = (int) $request->get_param( 'ts' );
-		if ( '' !== (string) $request->get_param( 'website' ) || ( $ts && ( time() - $ts ) < self::MIN_FILL_SECS ) ) {
+		// Bots get a fake success so they move on.
+		if ( EPIF_Guard::is_bot( $request ) ) {
 			return self::success();
 		}
 
-		$ip_hash = self::ip_hash();
-		$rl_key  = 'epif_rl_' . substr( $ip_hash, 0, 32 );
-		$count   = (int) get_transient( $rl_key );
-		if ( $count >= (int) EPIF_LEAD_RATE_LIMIT ) {
+		if ( EPIF_Guard::is_rate_limited( 'lead', EPIF_LEAD_RATE_LIMIT ) ) {
 			return new WP_Error( 'epif_rate_limited', __( 'Too many submissions. Please try again later or call us directly.', 'epif' ), array( 'status' => 429 ) );
 		}
 
@@ -96,7 +68,7 @@ class EPIF_Lead_API {
 			'message'    => (string) $request->get_param( 'message' ),
 			'source_url' => (string) $request->get_param( 'source_url' ),
 			'utm'        => (string) $request->get_param( 'utm' ),
-			'ip_hash'    => $ip_hash,
+			'ip_hash'    => EPIF_Guard::ip_hash(),
 		);
 
 		$errors = self::validate( $data );
@@ -113,7 +85,7 @@ class EPIF_Lead_API {
 			return new WP_Error( 'epif_store_failed', __( 'Something went wrong. Please call or email us directly.', 'epif' ), array( 'status' => 500 ) );
 		}
 
-		set_transient( $rl_key, $count + 1, HOUR_IN_SECONDS );
+		EPIF_Guard::record_hit( 'lead' );
 		self::notify( $lead_id, $data );
 
 		/**
@@ -199,14 +171,6 @@ class EPIF_Lead_API {
 			implode( "\n", $lines ),
 			array( 'Reply-To: ' . $data['name'] . ' <' . $data['email'] . '>' )
 		);
-	}
-
-	/**
-	 * Salted hash of the visitor IP: enough for rate limiting without storing raw IPs.
-	 */
-	private static function ip_hash() {
-		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-		return hash_hmac( 'sha256', $ip, wp_salt( 'nonce' ) );
 	}
 
 	private static function success() {

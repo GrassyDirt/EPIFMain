@@ -76,3 +76,31 @@ add_action(
 		}
 	}
 );
+
+// Comments off everywhere: this is a business site, not a blog, and open comment forms
+// mostly attract spam. (Also keeps the Cookie Policy accurate: no comment cookies.)
+add_filter( 'comments_open', '__return_false', 20 );
+add_filter( 'comments_array', '__return_empty_array' );
+add_action(
+	'init',
+	static function () {
+		foreach ( get_post_types() as $post_type ) {
+			remove_post_type_support( $post_type, 'comments' );
+			remove_post_type_support( $post_type, 'trackbacks' );
+		}
+	},
+	100
+);
+add_action(
+	'admin_menu',
+	static function () {
+		remove_menu_page( 'edit-comments.php' );
+	}
+);
+add_action(
+	'admin_bar_menu',
+	static function ( $bar ) {
+		$bar->remove_node( 'comments' );
+	},
+	999
+);

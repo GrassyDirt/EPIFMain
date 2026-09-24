@@ -88,9 +88,12 @@ $epif_defaults = array(
 	'WP_MAX_MEMORY_LIMIT' => '512M',
 
 	// EPIF Core (wp-content/mu-plugins/epif-core.php).
-	'EPIF_LEAD_NOTIFY_EMAIL' => '',  // Where new-lead emails go; empty = admin email.
-	'EPIF_LEAD_RATE_LIMIT'   => 5,   // Lead submissions per IP per hour.
-	'EPIF_HSTS'              => false, // Set true once HTTPS works on every URL.
+	'EPIF_COMING_SOON'             => true,  // Visitors see the coming-soon page. Set false at launch, then purge the cache.
+	'EPIF_NEWSLETTER_DOUBLE_OPTIN' => true,  // Subscribers confirm by email before they count.
+	'EPIF_NEWSLETTER_RATE_LIMIT'   => 5,     // Newsletter signup attempts per IP per hour.
+	'EPIF_LEAD_NOTIFY_EMAIL'       => '',    // Where new-lead emails go; empty = admin email.
+	'EPIF_LEAD_RATE_LIMIT'         => 5,     // Lead submissions per IP per hour.
+	'EPIF_HSTS'                    => false, // Set true once HTTPS works on every URL.
 );
 foreach ( $epif_defaults as $epif_name => $epif_value ) {
 	if ( ! defined( $epif_name ) ) {
