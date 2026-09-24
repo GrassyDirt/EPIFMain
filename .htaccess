@@ -1,0 +1,62 @@
+# epifservices.com root .htaccess (tracked in git; see README "Server files").
+# Plugins add their own "# BEGIN …" blocks here (LiteSpeed Cache, Loginizer, SpeedyCache);
+# WordPress manages the "# BEGIN WordPress" block. Keep the EPIF block outside those markers.
+
+# BEGIN EPIF Security
+# No directory listings.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Hidden files and folders (.git, .env, .user.ini, …), except /.well-known/ for SSL certificates.
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteRule (^|/)\. - [F,L]
+
+# WordPress internals that are never requested directly.
+RewriteRule ^wp-admin/includes/ - [F,L]
+RewriteRule !^wp-includes/ - [S=3]
+RewriteRule ^wp-includes/[^/]+\.php$ - [F,L]
+RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
+RewriteRule ^wp-includes/theme-compat/ - [F,L]
+RewriteRule ^(wp-settings|wp-blog-header|wp-config[^/]*)\.php$ - [F,L]
+
+# Uploaded files are never run as PHP.
+RewriteRule ^wp-content/uploads/.*\.(php[0-9]?|phtml|phar)$ - [F,L,NC]
+
+# XML-RPC is disabled by EPIF Core; refuse it before PHP even loads.
+RewriteRule ^xmlrpc\.php$ - [F,L]
+
+# Force HTTPS: uncomment once https://epifservices.com loads with a valid certificate.
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Files that reveal versions, paths, logs, or configuration.
+<FilesMatch "^(readme\.html|license\.txt|error_log|wp-config.*\.php|.*\.(log|sql|bak|md|sh)|composer\.(json|lock)|package(-lock)?\.json)$">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order allow,deny
+		Deny from all
+	</IfModule>
+</FilesMatch>
+# END EPIF Security
+
+# BEGIN WordPress
+# The directives (lines) between "BEGIN WordPress" and "END WordPress" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
