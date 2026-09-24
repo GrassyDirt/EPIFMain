@@ -1,0 +1,33 @@
+/*
+Theme Name:   EPIF
+Theme URI:    https://epifservices.com
+Description:  EPIF Services child theme of Twenty Twenty-Five with a conversion-focused landing page template.
+Author:       EPIF Services
+Template:     twentytwentyfive
+Version:      1.1.0
+Requires at least: 6.7
+Requires PHP: 7.4
+License:      GNU General Public License v2 or later
+License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain:  epif
+*/
+
+/* Coming-soon page */
+.epif-coming-soon {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.epif-eyebrow {
+	width: fit-content;
+	padding: 0.3rem 0.9rem;
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--wp--preset--color--accent-3) 12%, transparent);
+	color: var(--wp--preset--color--accent-3);
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+/* Footer legal links */
+.epif-legal-links a { color: inherit; }

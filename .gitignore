@@ -1,0 +1,22 @@
+# Server-only secrets (see wp-config-local-sample.php)
+wp-config-local.php
+
+# Logs
+error_log
+*.log
+
+# Generated per-server: caches, backups, uploads
+wp-content/cache/
+wp-content/litespeed/
+wp-content/speedycache-config/
+wp-content/backuply/backups*/*.tar.gz
+wp-content/backuply/backups*/*.zip
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/debug.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -21,46 +21,28 @@ define( 'WP_CACHE', true );
  * @package WordPress
  */
 
-// ** Database settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
-define( 'DB_NAME', 'amngfszdlp_wo39b11' );
-
-/** Database username */
-define( 'DB_USER', 'amngfszdlp_wo39b11' );
-
-/** Database password */
-define( 'DB_PASSWORD', '5t)).pqvS2JB))P8' );
-
-/** Database hostname */
-define( 'DB_HOST', 'localhost' );
-
-/** Database charset to use in creating database tables. */
-define( 'DB_CHARSET', 'utf8' );
-
-/** The database collate type. Don't change this if in doubt. */
-define( 'DB_COLLATE', '' );
-
-/**#@+
- * Authentication unique keys and salts.
- *
- * Change these to different unique phrases! You can generate these using
- * the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}.
- *
- * You can change these at any point in time to invalidate all existing cookies.
- * This will force all users to have to log in again.
- *
- * @since 2.6.0
+// ** Database credentials and auth salts ** //
+/*
+ * Secrets live in wp-config-local.php, which is git-ignored and exists only on the server.
+ * Copy wp-config-local-sample.php to wp-config-local.php and fill it in.
+ * It is looked for one directory above the web root first (safest), then next to this file.
  */
-define( 'AUTH_KEY',         'vs84yvgl3ert8wkmptzfcenr4zqkgdqqm9bdwrdca3clhs8hrziazwqyswhs3nlz' );
-define( 'SECURE_AUTH_KEY',  'zmju7xpfvr1cblehu8xphull6bnbajbyrlnz7km1okmytyjy9y6ualhyl9gzbxhy' );
-define( 'LOGGED_IN_KEY',    'mg5nje55lkaspjvtacsdum52rwps9ytxwmanjegkm0robixjdgoawfyinhqmyfp3' );
-define( 'NONCE_KEY',        '8g7szmr3yhtiwckw6ggcgyudgo1hctushbumf8fwpsrejgaphxnevsc6usiocdy7' );
-define( 'AUTH_SALT',        '0zjnj8qb1n3ghjvggftz0gffvmqhkwd9a8p7tthozb64qrw0fr6dhacevyp1hzsn' );
-define( 'SECURE_AUTH_SALT', 'e2dd4yvdiyrea0mjife78ogvnmqy1njcaany9744dypkyndg478bh0myzreyfrfn' );
-define( 'LOGGED_IN_SALT',   'rnr6vpq4x0m5iu11osyqjgzlehfkoyydzr9v49lvv4lukabbmifpq5rhvmdwvr3f' );
-define( 'NONCE_SALT',       'z6we3undt3r3qcwew6op1gvzeyzpd6ipfsqdefomflfal5dxdgrpckgnj5l191r2' );
+if ( file_exists( dirname( __DIR__ ) . '/wp-config-local.php' ) ) {
+	require_once dirname( __DIR__ ) . '/wp-config-local.php';
+} elseif ( file_exists( __DIR__ . '/wp-config-local.php' ) ) {
+	require_once __DIR__ . '/wp-config-local.php';
+} else {
+	header( 'HTTP/1.1 503 Service Unavailable' );
+	exit( 'Site configuration missing: create wp-config-local.php from wp-config-local-sample.php.' );
+}
 
-/**#@-*/
+if ( ! defined( 'DB_HOST' ) ) {
+	define( 'DB_HOST', 'localhost' );
+}
+
+/** utf8mb4 supports the full Unicode range (emoji, all languages). */
+defined( 'DB_CHARSET' ) || define( 'DB_CHARSET', 'utf8mb4' );
+defined( 'DB_COLLATE' ) || define( 'DB_COLLATE', '' );
 
 /**
  * WordPress database table prefix.
@@ -76,21 +58,49 @@ define( 'NONCE_SALT',       'z6we3undt3r3qcwew6op1gvzeyzpd6ipfsqdefomflfal5dxdgr
  */
 $table_prefix = 'soft_';
 
-/**
- * For developers: WordPress debugging mode.
- *
- * Change this to true to enable the display of notices during development.
- * It is strongly recommended that plugin and theme developers use WP_DEBUG
- * in their development environments.
- *
- * For information on other constants that can be used for debugging,
- * visit the documentation.
- *
- * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
- */
-define( 'WP_DEBUG', false );
+/* ------------------------------------------------------------------
+ * EPIF site settings (epifservices.com)
+ * Every define is guarded so a host-level or wp-config-local.php value wins
+ * (this also fixes the "Constant WP_DEBUG already defined" warnings in error_log).
+ * ------------------------------------------------------------------ */
+$epif_defaults = array(
+	// Environment. Override to 'staging' or 'development' in wp-config-local.php off production.
+	'WP_ENVIRONMENT_TYPE' => 'production',
 
-/* Add any custom values between this line and the "stop editing" line. */
+	// Debugging: never display errors to visitors; log them only when debugging is on.
+	'WP_DEBUG'            => false,
+	'WP_DEBUG_DISPLAY'    => false,
+	'WP_DEBUG_LOG'        => false,
+	'SCRIPT_DEBUG'        => false,
+
+	// Security.
+	'DISALLOW_FILE_EDIT'  => true,   // No theme/plugin code editor in the dashboard.
+	'FORCE_SSL_ADMIN'     => true,   // Logins and admin over HTTPS only.
+	'WP_AUTO_UPDATE_CORE' => 'minor', // Automatic security/maintenance releases.
+
+	// Database hygiene.
+	'WP_POST_REVISIONS'   => 10,
+	'AUTOSAVE_INTERVAL'   => 120,
+	'EMPTY_TRASH_DAYS'    => 14,
+
+	// Resources.
+	'WP_MEMORY_LIMIT'     => '256M',
+	'WP_MAX_MEMORY_LIMIT' => '512M',
+
+	// EPIF Core (wp-content/mu-plugins/epif-core.php).
+	'EPIF_COMING_SOON'             => true,  // Visitors see the coming-soon page. Set false at launch, then purge the cache.
+	'EPIF_NEWSLETTER_DOUBLE_OPTIN' => true,  // Subscribers confirm by email before they count.
+	'EPIF_NEWSLETTER_RATE_LIMIT'   => 5,     // Newsletter signup attempts per IP per hour.
+	'EPIF_LEAD_NOTIFY_EMAIL'       => '',    // Where new-lead emails go; empty = admin email.
+	'EPIF_LEAD_RATE_LIMIT'         => 5,     // Lead submissions per IP per hour.
+	'EPIF_HSTS'                    => false, // Set true once HTTPS works on every URL.
+);
+foreach ( $epif_defaults as $epif_name => $epif_value ) {
+	if ( ! defined( $epif_name ) ) {
+		define( $epif_name, $epif_value );
+	}
+}
+unset( $epif_defaults, $epif_name, $epif_value );
 
 /* That's all, stop editing! Happy publishing. */
 
