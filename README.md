@@ -51,3 +51,17 @@ They describe the site as built: no analytics or ad cookies, comments off, Akism
 
 Production defaults: errors never displayed, dashboard file editor disabled, admin forced to HTTPS, automatic minor core updates, `utf8mb4`, 10 revisions per post, 256M/512M memory. Every value can be overridden per server in `wp-config-local.php`.
 Set `EPIF_HSTS` to `true` once HTTPS works on every URL.
+
+## Server files
+
+- `.htaccess` (root) is tracked in git. It holds WordPress's rewrite rules plus EPIF security rules: no directory listings; `.git`, `wp-config*.php`, logs and readme files blocked; no PHP execution in uploads; XML-RPC refused.
+  LiteSpeed Cache and Loginizer add their own blocks when you save their settings. After a deploy that replaces `.htaccess`, re-save **Settings → Permalinks**, **LiteSpeed Cache** settings, and any Loginizer custom admin URL.
+- If the site shows **500 Internal Server Error** right after adding `.htaccess`, the host doesn't allow `Options` overrides: delete the `Options -Indexes` line.
+
+## Locked out? (404 on /wp-admin or the login page)
+
+1. Go to `https://epifservices.com/wp-login.php`. If Loginizer's custom admin/login URL has lost its `.htaccess` rules, EPIF Core automatically switches back to the standard addresses and shows a dashboard notice.
+2. Still 404? Make sure the root `.htaccess` from this repo is on the server, then purge the LiteSpeed cache (hosting panel → LiteSpeed → Flush All), because LiteSpeed can cache 404 pages.
+3. Force the standard login addresses: add `define( 'EPIF_LOGIN_RESCUE', true );` to `wp-config-local.php`.
+4. Last resort: in the hosting File Manager, rename `wp-content/plugins/loginizer-security` (and `loginizer`) to `…-off`. That switches the plugin off; rename it back after logging in.
+5. If admin pages redirect to HTTPS and fail, the SSL certificate isn't active yet: add `define( 'FORCE_SSL_ADMIN', false );` to `wp-config-local.php` until it is.

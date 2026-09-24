@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EPIF Core
  * Description: Site backend for epifservices.com — coming-soon mode, newsletter signups, lead capture, business info, legal pages, and security/performance defaults. Loaded as a must-use plugin so it cannot be deactivated from the dashboard.
- * Version:     1.1.0
+ * Version:     1.2.0
  * Author:      EPIF Services
  * License:     GPL-2.0-or-later
  *
@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'EPIF_CORE_VERSION', '1.1.0' );
+define( 'EPIF_CORE_VERSION', '1.2.0' );
 define( 'EPIF_CORE_DIR', __DIR__ . '/epif-core/' );
 
 // Settings can be overridden in wp-config.php before WordPress loads.
@@ -31,6 +31,10 @@ if ( ! defined( 'EPIF_NEWSLETTER_DOUBLE_OPTIN' ) ) {
 	// Require subscribers to confirm by email before they count as subscribed.
 	define( 'EPIF_NEWSLETTER_DOUBLE_OPTIN', true );
 }
+if ( ! defined( 'EPIF_LOGIN_RESCUE' ) ) {
+	// Force standard /wp-admin/ and /wp-login.php even if Loginizer renamed them.
+	define( 'EPIF_LOGIN_RESCUE', false );
+}
 if ( ! defined( 'EPIF_NEWSLETTER_RATE_LIMIT' ) ) {
 	// Max newsletter signup attempts allowed per IP per hour.
 	define( 'EPIF_NEWSLETTER_RATE_LIMIT', 5 );
@@ -45,6 +49,7 @@ require_once EPIF_CORE_DIR . 'includes/class-epif-lead-api.php';
 require_once EPIF_CORE_DIR . 'includes/class-epif-lead-form.php';
 require_once EPIF_CORE_DIR . 'includes/class-epif-newsletter.php';
 require_once EPIF_CORE_DIR . 'includes/class-epif-coming-soon.php';
+require_once EPIF_CORE_DIR . 'includes/login-rescue.php';
 require_once EPIF_CORE_DIR . 'includes/hardening.php';
 require_once EPIF_CORE_DIR . 'includes/performance.php';
 
