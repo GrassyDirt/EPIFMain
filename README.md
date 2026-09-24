@@ -52,6 +52,18 @@ They describe the site as built: no analytics or ad cookies, comments off, Akism
 Production defaults: errors never displayed, dashboard file editor disabled, admin forced to HTTPS, automatic minor core updates, `utf8mb4`, 10 revisions per post, 256M/512M memory. Every value can be overridden per server in `wp-config-local.php`.
 Set `EPIF_HSTS` to `true` once HTTPS works on every URL.
 
+## Deploying (cPanel Git Version Control)
+
+`.cpanel.yml` copies only what this repo manages into `/home/amngfszdlp/epifservices.com`:
+`wp-content/mu-plugins/`, `wp-content/themes/epif/`, `wp-config.php`, and the `# BEGIN EPIF Security` block of `.htaccess`.
+WordPress core, other plugins, uploads, caches and backups on the server are never touched; keep updating those from the dashboard.
+
+- `wp-config.php` is only copied when `wp-config-local.php` already exists on the server, so a deploy can't take the site down.
+- `.htaccess` is merged, not replaced (`deploy/merge-htaccess.php`): the EPIF block is updated, a WordPress block is added only if missing, and LiteSpeed/Loginizer blocks are kept. The previous file is saved as `.htaccess.epif-bak`.
+
+One-time setup: in cPanel → **Git Version Control**, clone this repo into a folder **outside** the website, for example `/home/amngfszdlp/repositories/EPIFMain`, not into `epifservices.com` itself. Plugins change files in the live folder, and cPanel refuses to deploy a clone with uncommitted changes.
+To deploy: **Manage → Pull or Deploy → Update from Remote**, then **Deploy HEAD Commit**.
+
 ## Server files
 
 - `.htaccess` (root) is tracked in git. It holds WordPress's rewrite rules plus EPIF security rules: no directory listings; `.git`, `wp-config*.php`, logs and readme files blocked; no PHP execution in uploads; XML-RPC refused.

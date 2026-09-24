@@ -1,0 +1,15 @@
+---
+# cPanel Git Version Control deployment (cPanel → Git Version Control → Manage → Pull or Deploy).
+#
+# Copies ONLY the files this repo manages into the live WordPress folder. WordPress core,
+# third-party plugins, uploads, caches and backups on the server are never touched, so
+# WordPress's own updater stays in charge of them and a deploy can't roll them back.
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/amngfszdlp/epifservices.com
+    - /bin/mkdir -p "$DEPLOYPATH/wp-content/mu-plugins" "$DEPLOYPATH/wp-content/themes/epif"
+    - /bin/cp -R wp-content/mu-plugins/. "$DEPLOYPATH/wp-content/mu-plugins/"
+    - /bin/cp -R wp-content/themes/epif/. "$DEPLOYPATH/wp-content/themes/epif/"
+    - /bin/cp wp-config-local-sample.php "$DEPLOYPATH/"
+    - 'if [ -f "$DEPLOYPATH/wp-config-local.php" ] || [ -f "$DEPLOYPATH/../wp-config-local.php" ]; then /bin/cp wp-config.php "$DEPLOYPATH/"; else echo "SKIPPED wp-config.php: create wp-config-local.php on the server first"; fi'
+    - 'PHP_BIN=$(command -v php || echo /usr/local/bin/php); "$PHP_BIN" deploy/merge-htaccess.php .htaccess "$DEPLOYPATH/.htaccess"'
