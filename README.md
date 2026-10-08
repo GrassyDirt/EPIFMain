@@ -20,6 +20,15 @@ epifservices.com — WordPress site.
 5. **Pages**: review the legal drafts (a dashboard notice links to them), have them checked by a lawyer, then publish. Links appear in the footer once each page is published. Publish the Privacy Policy before promoting the signup form.
 6. LiteSpeed Cache → **Purge All** after deploying.
 
+## Early-access page (digital mall)
+
+`themes/epif/patterns/early-access.php` is the early-access page from the "EPIF Early Access" design: hero, how the mall works, rollout, founding spots and prices, a join form, and FAQ. Visitors see it while coming-soon mode is on, and any page can use it via the **Early Access (digital mall)** template.
+
+- The join form (`[epif_join_form]`) saves to **Leads**: role → Service, "what you sell / shop for" → Company, ticked features → message.
+- Highlighted `[TERM]`, `[YOUR PRICE]`, `[YOUR START TERMS]` and `[OWNER NAMES]` are placeholders to fill in by editing the pattern before launch. Phone and email come from EPIF Business Info. Founding spots default to 25 (`epif_founding_spots` filter).
+- The two dashed boxes are photo placeholders.
+- Fonts (Public Sans, Young Serif; SIL OFL) are self-hosted in `themes/epif/assets/fonts/`.
+
 ## Coming-soon mode
 
 `EPIF_COMING_SOON` (on by default in `wp-config.php`) shows visitors the "coming soon" page with the newsletter signup. Every other URL redirects to it, except the published legal pages.

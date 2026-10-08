@@ -4,7 +4,7 @@ Theme URI:    https://epifservices.com
 Description:  EPIF Services child theme of Twenty Twenty-Five with a conversion-focused landing page template.
 Author:       EPIF Services
 Template:     twentytwentyfive
-Version:      1.1.0
+Version:      1.2.0
 Requires at least: 6.7
 Requires PHP: 7.4
 License:      GNU General Public License v2 or later
@@ -31,3 +31,133 @@ Text Domain:  epif
 
 /* Footer legal links */
 .epif-legal-links a { color: inherit; }
+
+/* ---------------------------------------------------------------
+ * Early-access page (patterns/early-access.php, templates/coming-soon.html)
+ * Fonts are self-hosted so the page makes no third-party requests.
+ * ------------------------------------------------------------- */
+@font-face {
+	font-family: "Public Sans";
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url("assets/fonts/public-sans-latin.woff2") format("woff2");
+}
+@font-face {
+	font-family: "Young Serif";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("assets/fonts/young-serif-latin.woff2") format("woff2");
+}
+.epif-ea {
+	--ea-ink: #0b2038;
+	--ea-muted: #44566b;
+	--ea-line: #d3dce5;
+	--ea-line-2: #b9c7d4;
+	--ea-field: #6f8cab;
+	--ea-tint: #f1f7fc;
+	--ea-green: #9ecb58;
+	--ea-link: #1f5f9f;
+	--ea-focus: #3d92e6;
+	--ea-serif: "Young Serif", Georgia, serif;
+	background: #fff;
+	color: var(--ea-ink);
+	font-family: "Public Sans", system-ui, sans-serif;
+	font-size: 17px;
+	line-height: 1.6;
+}
+.epif-ea a { color: var(--ea-link); }
+.epif-ea a:hover { color: var(--ea-ink); }
+.epif-ea :is(a, button, input, select, summary):focus-visible { outline: 3px solid var(--ea-focus); outline-offset: 2px; }
+.epif-ea mark { background: #fff3b0; color: inherit; padding: 0 0.15em; }
+.epif-ea h1, .epif-ea h2 { margin: 0; font-family: var(--ea-serif); font-weight: 400; }
+.epif-ea h1 { font-size: clamp(38px, 5.6vw, 62px); line-height: 1.08; }
+.epif-ea h2 { font-size: clamp(28px, 3.6vw, 40px); line-height: 1.15; max-width: 720px; }
+.epif-ea h3 { margin: 0 0 12px; font-size: 19px; font-weight: 600; }
+.epif-ea p { margin: 0; }
+.epif-ea-muted { color: var(--ea-muted); }
+.epif-ea-small { margin-top: 16px !important; font-size: 15.5px; }
+.epif-ea-wrap { max-width: 1080px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+.epif-ea section > .epif-ea-wrap { box-sizing: border-box; }
+
+/* Header */
+.epif-ea-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding-top: 22px; padding-bottom: 22px; }
+.epif-ea-logo { font-family: var(--ea-serif); font-size: 26px; letter-spacing: 0.04em; }
+.epif-ea-nav { display: flex; flex-wrap: wrap; gap: 4px 24px; }
+.epif-ea-nav a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ea-ink); font-weight: 500; text-decoration: none; }
+.epif-ea-nav a:hover { text-decoration: underline; }
+
+/* Buttons */
+.epif-ea-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px !important; }
+.epif-ea-btn,
+.epif-ea .epif-join-form button {
+	display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px;
+	border: 1px solid var(--ea-green); border-radius: 6px;
+	background: var(--ea-green); color: var(--ea-ink);
+	font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
+}
+.epif-ea-btn:hover,
+.epif-ea .epif-join-form button:hover { background: var(--ea-ink); border-color: var(--ea-ink); color: #fff; }
+.epif-ea-btn--line { background: transparent; border-color: var(--ea-ink); }
+
+/* Hero */
+.epif-ea-hero { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 48px; padding-top: 48px; padding-bottom: 88px; }
+.epif-ea-hero-text { flex: 1 1 440px; min-width: 0; }
+.epif-ea-lede { margin-top: 28px !important; max-width: 520px; font-size: 19px; color: var(--ea-muted); }
+.epif-ea-photo {
+	box-sizing: border-box; min-height: 260px; padding: 20px;
+	display: flex; align-items: flex-end;
+	border: 2px dashed var(--ea-field); background: #f1f5f8; color: var(--ea-muted); font-size: 15px;
+}
+.epif-ea-photo--hero { flex: 1 1 380px; min-width: 0; min-height: 380px; padding: 24px; }
+
+/* Sections */
+.epif-ea-band { border-top: 1px solid var(--ea-line); padding: 80px 0; }
+.epif-ea-tint { background: var(--ea-tint); padding: 88px 0; }
+.epif-ea-plain { padding: 88px 0; }
+.epif-ea-split { display: flex; flex-wrap: wrap; gap: 32px 64px; }
+.epif-ea-split > h2 { flex: 1 1 280px; min-width: 0; }
+.epif-ea-body { flex: 2 1 460px; min-width: 0; max-width: 680px; margin: 0; }
+.epif-ea-body > p + p { margin-top: 20px; }
+.epif-ea-intro { margin-top: 20px !important; max-width: 680px; }
+.epif-ea-cols { display: flex; flex-wrap: wrap; gap: 40px 64px; align-items: flex-start; }
+.epif-ea-cols > * { flex: 1 1 360px; min-width: 0; }
+.epif-ea-tint .epif-ea-cols { margin-top: 48px; }
+.epif-ea-cols h3 + ul + h3 { margin-top: 32px; }
+.epif-ea-cols ul { margin: 0; padding-left: 20px; }
+.epif-ea-cols li + li { margin-top: 8px; }
+.epif-ea-plain .epif-ea-cols p + p,
+.epif-ea-plain .epif-ea-cols h2 + p { margin-top: 20px; }
+.epif-ea-tint .epif-ea-ctas { margin-top: 44px !important; }
+
+/* Rollout steps and price table */
+.epif-ea-steps > div { display: flex; flex-wrap: wrap; gap: 4px 24px; padding: 18px 0; border-top: 1px solid var(--ea-line); }
+.epif-ea-steps > div:last-child { border-bottom: 1px solid var(--ea-line); }
+.epif-ea-steps dt { flex: 0 0 72px; font-weight: 600; }
+.epif-ea-steps dd { flex: 1 1 280px; min-width: 0; margin: 0; color: var(--ea-muted); }
+.epif-ea-prices { margin: 0; border-top: 1px solid var(--ea-line-2); }
+.epif-ea-prices > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; padding: 14px 0; border-bottom: 1px solid var(--ea-line-2); }
+.epif-ea-prices dd { margin: 0; font-weight: 600; }
+
+/* Join form */
+.epif-ea-narrow { max-width: 600px; margin: 0 auto; padding: 0 24px; }
+.epif-ea-narrow > p { margin-top: 16px; }
+.epif-ea .epif-join-form { margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }
+.epif-ea .epif-join-form label,
+.epif-ea .epif-join-form legend { font-size: inherit; font-weight: 600; }
+.epif-ea .epif-join-form :is(input[type="text"], input[type="email"], select) {
+	box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px;
+	border: 1px solid var(--ea-field); border-radius: 6px; background: #fff; color: var(--ea-ink); font: inherit;
+}
+.epif-ea .epif-checks { margin: 0; padding: 0; border: 0; }
+.epif-ea .epif-checks legend { padding: 0; }
+.epif-ea .epif-checks label { display: flex; align-items: center; gap: 12px; min-height: 44px; font-weight: 400; }
+.epif-ea .epif-checks input { width: 20px; height: 20px; margin: 0; }
+.epif-ea .epif-join-form .epif-status:not(:empty) { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--ea-field); background: #fff; color: var(--ea-muted); }
+
+/* FAQ */
+.epif-ea-faq details { padding: 18px 0; border-top: 1px solid var(--ea-line); }
+.epif-ea-faq details:last-child { border-bottom: 1px solid var(--ea-line); }
+.epif-ea-faq summary { font-weight: 600; cursor: pointer; }
+.epif-ea-faq details p { margin-top: 12px; color: var(--ea-muted); }
