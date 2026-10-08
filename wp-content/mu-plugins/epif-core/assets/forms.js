@@ -83,8 +83,9 @@
 		}
 
 		var data = {};
+		// Repeated names (e.g. a group of checkboxes) are joined into one line each.
 		new FormData( form ).forEach( function ( value, key ) {
-			data[ key ] = value;
+			data[ key ] = key in data ? data[ key ] + '\n' + value : value;
 		} );
 		data.source_url = window.location.href.split( '#' )[ 0 ];
 		data.utm = utm();

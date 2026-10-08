@@ -35,6 +35,11 @@
 			"name": "page-landing",
 			"title": "Landing Page",
 			"postTypes": [ "page" ]
+		},
+		{
+			"name": "page-early-access",
+			"title": "Early Access (digital mall)",
+			"postTypes": [ "page" ]
 		}
 	]
 }
