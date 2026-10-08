@@ -24,3 +24,28 @@ add_action(
 		register_block_pattern_category( 'epif', array( 'label' => __( 'EPIF', 'epif' ) ) );
 	}
 );
+
+/**
+ * Early-access page markup (inc/early-access.php), rendered fresh each request.
+ */
+function epif_early_access_html() {
+	ob_start();
+	include __DIR__ . '/inc/early-access.php';
+	return ob_get_clean();
+}
+
+// [epif_early_access] puts the whole early-access page into any page's content.
+add_action(
+	'init',
+	static function () {
+		add_shortcode( 'epif_early_access', 'epif_early_access_html' );
+	}
+);
+
+// Show the theme's styles inside the block editor too.
+add_action(
+	'after_setup_theme',
+	static function () {
+		add_editor_style( 'style.css' );
+	}
+);

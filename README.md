@@ -22,10 +22,10 @@ epifservices.com — WordPress site.
 
 ## Early-access page (digital mall)
 
-`themes/epif/patterns/early-access.php` is the early-access page from the "EPIF Early Access" design: hero, how the mall works, rollout, founding spots and prices, a join form, and FAQ. Visitors see it while coming-soon mode is on, and any page can use it via the **Early Access (digital mall)** template.
+`themes/epif/inc/early-access.php` is the early-access page from the "EPIF Early Access" design: hero, how the mall works, rollout, founding spots and prices, a join form, and FAQ. Visitors see it while coming-soon mode is on, and any page can use it via the **Early Access (digital mall)** template, or by inserting the **EPIF early access page** pattern (a `[epif_early_access]` shortcode, so it always shows the current version).
 
 - The join form (`[epif_join_form]`) saves to **Leads**: role → Service, "what you sell / shop for" → Company, ticked features → message.
-- Highlighted `[TERM]`, `[YOUR PRICE]`, `[YOUR START TERMS]` and `[OWNER NAMES]` are placeholders to fill in by editing the pattern before launch. Phone and email come from EPIF Business Info. Founding spots default to 25 (`epif_founding_spots` filter).
+- Highlighted `[TERM]`, `[YOUR PRICE]`, `[YOUR START TERMS]` and `[OWNER NAMES]` are placeholders to fill in by editing `themes/epif/inc/early-access.php` before launch. Phone and email come from EPIF Business Info. Founding spots default to 25 (`epif_founding_spots` filter).
 - The two dashed boxes are photo placeholders.
 - Fonts (Public Sans, Young Serif; SIL OFL) are self-hosted in `themes/epif/assets/fonts/`.
 
