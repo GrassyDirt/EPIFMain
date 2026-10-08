@@ -124,7 +124,10 @@ $epif_spots = (int) apply_filters( 'epif_founding_spots', 25 );
 	<div class="epif-ea-narrow">
 		<h2><?php esc_html_e( 'Join the list', 'epif' ); ?></h2>
 		<p class="epif-ea-muted"><?php esc_html_e( 'Shoppers and store owners both start here. Founding spots go in the order store owners sign up.', 'epif' ); ?></p>
-		[epif_join_form button="Join the list"]
+		<?php
+		// Rendered here, not as [shortcode] text: templates run shortcodes before patterns expand.
+		echo shortcode_exists( 'epif_join_form' ) ? do_shortcode( '[epif_join_form button="Join the list"]' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput
+		?>
 	</div>
 </section>
 

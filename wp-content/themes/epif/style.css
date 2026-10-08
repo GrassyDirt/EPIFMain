@@ -79,7 +79,6 @@ Text Domain:  epif
 .epif-ea-muted { color: var(--ea-muted); }
 .epif-ea-small { margin-top: 16px !important; font-size: 15.5px; }
 .epif-ea-wrap { max-width: 1080px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
-.epif-ea section > .epif-ea-wrap { box-sizing: border-box; }
 
 /* Header */
 .epif-ea-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding-top: 22px; padding-bottom: 22px; }
@@ -90,16 +89,16 @@ Text Domain:  epif
 
 /* Buttons */
 .epif-ea-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px !important; }
-.epif-ea-btn,
+.epif-ea a.epif-ea-btn,
 .epif-ea .epif-join-form button {
 	display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px;
 	border: 1px solid var(--ea-green); border-radius: 6px;
 	background: var(--ea-green); color: var(--ea-ink);
 	font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
 }
-.epif-ea-btn:hover,
+.epif-ea a.epif-ea-btn:hover,
 .epif-ea .epif-join-form button:hover { background: var(--ea-ink); border-color: var(--ea-ink); color: #fff; }
-.epif-ea-btn--line { background: transparent; border-color: var(--ea-ink); }
+.epif-ea a.epif-ea-btn--line { background: transparent; border-color: var(--ea-ink); }
 
 /* Hero */
 .epif-ea-hero { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 48px; padding-top: 48px; padding-bottom: 88px; }
