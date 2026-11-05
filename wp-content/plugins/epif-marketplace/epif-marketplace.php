@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: EPIF Marketplace
- * Description: Landing page design system for EPIF — Enjoy the Past, Improve the Future. Registers the EPIF stylesheet, button block styles, auction countdown timers and the landing page block pattern.
- * Version:     1.1.0
+ * Description: Landing page design system for EPIF — Enjoy the Past, Improve the Future. Registers the EPIF stylesheet, button block styles, auction countdown timers, the landing page block pattern and an EPIF skin for WooCommerce.
+ * Version:     1.2.0
  * Author:      EPIF
  * License:     GPL-2.0-or-later
  * Text Domain: epif
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EPIF_VERSION', '1.1.0' );
+define( 'EPIF_VERSION', '1.2.0' );
 define( 'EPIF_DIR', plugin_dir_path( __FILE__ ) );
 define( 'EPIF_URL', plugin_dir_url( __FILE__ ) );
 
@@ -45,6 +45,73 @@ function epif_enqueue_editor_assets() {
 	wp_enqueue_style( 'epif-editor', EPIF_URL . 'assets/epif.css', array(), EPIF_VERSION );
 }
 add_action( 'enqueue_block_editor_assets', 'epif_enqueue_editor_assets' );
+
+/**
+ * WooCommerce skin. Loaded only while WooCommerce is active and after
+ * WooCommerce's own stylesheets, so the brand wins on equal specificity
+ * whichever theme is active. Priority 20 runs after WooCommerce registers its
+ * styles at the default priority.
+ */
+function epif_enqueue_woocommerce_assets() {
+	if ( ! class_exists( 'WooCommerce' ) ) {
+		return;
+	}
+
+	$deps = array( 'epif' );
+	foreach ( array( 'woocommerce-general', 'woocommerce-layout', 'wc-blocks-style' ) as $handle ) {
+		if ( wp_style_is( $handle, 'registered' ) ) {
+			$deps[] = $handle;
+		}
+	}
+
+	wp_enqueue_style( 'epif-woocommerce', EPIF_URL . 'assets/epif-woocommerce.css', $deps, EPIF_VERSION );
+}
+add_action( 'wp_enqueue_scripts', 'epif_enqueue_woocommerce_assets', 20 );
+
+function epif_enqueue_woocommerce_editor_assets() {
+	if ( class_exists( 'WooCommerce' ) ) {
+		wp_enqueue_style( 'epif-woocommerce-editor', EPIF_URL . 'assets/epif-woocommerce.css', array( 'epif-editor' ), EPIF_VERSION );
+	}
+}
+add_action( 'enqueue_block_editor_assets', 'epif_enqueue_woocommerce_editor_assets', 20 );
+
+/**
+ * Products without a photo get the EPIF striped placeholder instead of
+ * WooCommerce's grey default. A placeholder chosen under WooCommerce →
+ * Settings → Products is left alone; WooCommerce's own default image (which it
+ * saves as an attachment on install) is replaced.
+ */
+function epif_woocommerce_uses_default_placeholder() {
+	$id = (int) get_option( 'woocommerce_placeholder_image', 0 );
+	if ( $id <= 0 ) {
+		return true;
+	}
+
+	return false !== strpos( (string) get_attached_file( $id ), 'woocommerce-placeholder' );
+}
+
+function epif_woocommerce_placeholder_src( $src ) {
+	return epif_woocommerce_uses_default_placeholder() ? EPIF_URL . 'assets/item-placeholder.svg' : $src;
+}
+add_filter( 'woocommerce_placeholder_img_src', 'epif_woocommerce_placeholder_src' );
+
+function epif_woocommerce_placeholder_img( $html, $size, $dimensions ) {
+	if ( ! epif_woocommerce_uses_default_placeholder() ) {
+		return $html;
+	}
+
+	$width  = isset( $dimensions['width'] ) ? (int) $dimensions['width'] : 600;
+	$height = isset( $dimensions['height'] ) ? (int) $dimensions['height'] : 450;
+
+	return sprintf(
+		'<img src="%s" alt="%s" width="%d" height="%d" class="woocommerce-placeholder wp-post-image" decoding="async" />',
+		esc_url( EPIF_URL . 'assets/item-placeholder.svg' ),
+		esc_attr__( 'Photo coming soon', 'epif' ),
+		$width,
+		$height
+	);
+}
+add_filter( 'woocommerce_placeholder_img', 'epif_woocommerce_placeholder_img', 10, 3 );
 
 /**
  * Classic themes don't handle .alignfull, so the CSS fallback is opt-in.

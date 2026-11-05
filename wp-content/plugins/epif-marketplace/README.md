@@ -28,6 +28,25 @@ theme changes.
   - *EPIF site footer* — brand blurb with the diversion figure, three link
     columns, contact line, legal links. Offered in the Footer inserter.
 
+## WooCommerce
+
+When WooCommerce is active, `assets/epif-woocommerce.css` re-skins the shop in
+the EPIF brand, whichever theme is active: product cards, prices, sale
+badges, star ratings, add-to-cart / checkout / place-order buttons, notices,
+form fields, cart and order tables, totals, pagination, the store notice and
+the My Account menu. It covers both the classic templates and the block-based
+shop, cart and checkout, and loads after WooCommerce's own stylesheets.
+
+- Blue = buy, orange = sale, green = success / in stock / savings. Buttons use
+  the darker brand blue and the sale badge uses dark-orange text on pale orange
+  so text stays at WCAG AA contrast.
+- Products without a photo show the EPIF striped placeholder instead of
+  WooCommerce's grey one, unless you pick your own placeholder under
+  WooCommerce → Settings → Products.
+
+The stock Twenty Twenty-Three/Four/Five themes are not edited — WordPress
+updates would overwrite them. The styling lives here so it follows any theme.
+
 ## Setup
 
 1. Deploy the repo (`.cpanel.yml` copies this folder to

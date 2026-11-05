@@ -7,7 +7,7 @@ epifservices.com — WordPress site.
 | --- | --- |
 | `wp-content/mu-plugins/epif-core.php` + `epif-core/` | Always-on site backend: coming-soon mode, newsletter signups (**Subscribers**), lead capture (**Leads**), **Settings → EPIF Business Info**, legal pages, security + performance defaults. |
 | `wp-content/mu-plugins/epif-core/legal/` | Draft Privacy Policy, Terms of Use, Cookie Policy, Accessibility Statement. |
-| `wp-content/plugins/epif-marketplace/` | EPIF brand design system from the EPIFsiterepo project: logo mark, colours, Fraunces type, marketplace landing page, site header and footer patterns (Patterns → EPIF). See its README. |
+| `wp-content/plugins/epif-marketplace/` | EPIF brand design system from the EPIFsiterepo project: logo mark, colours, Fraunces type, marketplace landing page, site header and footer patterns (Patterns → EPIF), and an EPIF skin for WooCommerce that works with any theme. See its README. |
 | `wp-content/themes/epif/` | Child theme of Twenty Twenty-Five: coming-soon page, site footer, **Landing Page** template, EPIF block patterns. |
 | `wp-config.php` | EPIF-tuned settings. Secrets are loaded from `wp-config-local.php` (never committed). |
 
