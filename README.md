@@ -7,6 +7,7 @@ epifservices.com — WordPress site.
 | --- | --- |
 | `wp-content/mu-plugins/epif-core.php` + `epif-core/` | Always-on site backend: coming-soon mode, newsletter signups (**Subscribers**), lead capture (**Leads**), **Settings → EPIF Business Info**, legal pages, security + performance defaults. |
 | `wp-content/mu-plugins/epif-core/legal/` | Draft Privacy Policy, Terms of Use, Cookie Policy, Accessibility Statement. |
+| `wp-content/plugins/epif-marketplace/` | EPIF brand design system from the EPIFsiterepo project: logo mark, colours, Fraunces type, marketplace landing page, site header and footer patterns (Patterns → EPIF). See its README. |
 | `wp-content/themes/epif/` | Child theme of Twenty Twenty-Five: coming-soon page, site footer, **Landing Page** template, EPIF block patterns. |
 | `wp-config.php` | EPIF-tuned settings. Secrets are loaded from `wp-config-local.php` (never committed). |
 
@@ -14,7 +15,7 @@ epifservices.com — WordPress site.
 
 1. Copy `wp-config-local-sample.php` to `wp-config-local.php` — preferably one directory **above** the web root — and fill in the DB credentials and fresh salts from https://api.wordpress.org/secret-key/1.1/salt/.
    `wp-config.php` refuses to boot (HTTP 503) if this file is missing.
-2. Dashboard → Appearance → Themes → activate **EPIF**.
+2. Dashboard → Appearance → Themes → activate **EPIF**, then Plugins → activate **EPIF Marketplace**.
 3. **Settings → EPIF Business Info**: fill in the legal name, contact email, mailing address, governing law, and effective date. The footer, legal pages, and emails all read from here.
 4. Configure **GoSMTP** so newsletter confirmation and lead emails are delivered. Send yourself a test signup.
 5. **Pages**: review the legal drafts (a dashboard notice links to them), have them checked by a lawyer, then publish. Links appear in the footer once each page is published. Publish the Privacy Policy before promoting the signup form.
@@ -28,6 +29,10 @@ epifservices.com — WordPress site.
 - Highlighted `[TERM]`, `[YOUR PRICE]`, `[YOUR START TERMS]` and `[OWNER NAMES]` are placeholders to fill in by editing the pattern before launch. Phone and email come from EPIF Business Info. Founding spots default to 25 (`epif_founding_spots` filter).
 - The two dashed boxes are photo placeholders.
 - Fonts (Public Sans, Young Serif; SIL OFL) are self-hosted in `themes/epif/assets/fonts/`.
+
+## Branding and service area
+
+EPIF is headquartered in **Westminster, MD** and serves **Carroll County and the Baltimore area**. The brand comes from the EPIF Marketplace plugin: ink `#342E37`, paper `#FAF8F4`, blue `#3C91E6` (`#2B72BC` for text and buttons, for contrast), orange `#FA824C` (auctions), green `#9FD356` (tokens/impact). The theme's colour palette uses the same values, and the EPIF mark is the browser-tab icon until a Site Icon is set.
 
 ## Coming-soon mode
 
@@ -64,7 +69,7 @@ Set `EPIF_HSTS` to `true` once HTTPS works on every URL.
 ## Deploying (cPanel Git Version Control)
 
 `.cpanel.yml` copies only what this repo manages into `/home/amngfszdlp/epifservices.com`:
-`wp-content/mu-plugins/`, `wp-content/themes/epif/`, `wp-config.php`, and the `# BEGIN EPIF Security` block of `.htaccess`.
+`wp-content/mu-plugins/`, `wp-content/themes/epif/`, `wp-content/plugins/epif-marketplace/`, `wp-config.php`, and the `# BEGIN EPIF Security` block of `.htaccess`.
 WordPress core, other plugins, uploads, caches and backups on the server are never touched; keep updating those from the dashboard.
 
 - `wp-config.php` is only copied when `wp-config-local.php` already exists on the server, so a deploy can't take the site down.

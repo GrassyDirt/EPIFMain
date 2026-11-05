@@ -24,3 +24,14 @@ add_action(
 		register_block_pattern_category( 'epif', array( 'label' => __( 'EPIF', 'epif' ) ) );
 	}
 );
+
+// Browser-tab icon: the EPIF mark, until a Site Icon is set under Appearance → Editor → Site Identity.
+add_action(
+	'wp_head',
+	static function () {
+		if ( has_site_icon() ) {
+			return;
+		}
+		printf( '<link rel="icon" href="%s" type="image/svg+xml">' . "\n", esc_url( get_theme_file_uri( 'assets/images/epif-mark.svg' ) ) );
+	}
+);

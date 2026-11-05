@@ -53,7 +53,7 @@ $epif_spots = (int) apply_filters( 'epif_founding_spots', 25 );
 		<div class="epif-ea-body">
 			<p><?php esc_html_e( 'A shopper opens the mall in a browser and walks into a store that has been scanned in 3D. You can look at the shelves from any angle, tap an item, and go to that store\'s own shop to buy it or arrange a pickup.', 'epif' ); ?></p>
 			<p><?php esc_html_e( 'A store owner books a scan. We come to the shop, capture it, process the scan, and place it in the mall. The store pays monthly rent for its spot, plus a fee when we come back to update it or take it down.', 'epif' ); ?></p>
-			<p><?php esc_html_e( 'We run junk removal and resale in Carroll County, Maryland, and we are starting with stores in and around the county.', 'epif' ); ?></p>
+			<p><?php esc_html_e( 'We run junk removal and resale from our base in Westminster, Maryland, and we are starting with stores in Carroll County and the Baltimore area.', 'epif' ); ?></p>
 		</div>
 	</div>
 </section>
@@ -113,7 +113,7 @@ $epif_spots = (int) apply_filters( 'epif_founding_spots', 25 );
 	<div class="epif-ea-wrap epif-ea-cols">
 		<div>
 			<h2><?php esc_html_e( 'Who you would be working with', 'epif' ); ?></h2>
-			<p class="epif-ea-muted"><?php esc_html_e( 'EPIF is locally owned and based in Carroll County, Maryland. We do junk removal and resale, and we resell and donate what we can to keep it out of the landfill.', 'epif' ); ?> <mark>[OWNER NAMES]</mark> <?php esc_html_e( 'run EPIF.', 'epif' ); ?></p>
+			<p class="epif-ea-muted"><?php esc_html_e( 'EPIF is locally owned and headquartered in Westminster, Maryland, serving Carroll County and the Baltimore area. We do junk removal and resale, and we resell and donate what we can to keep it out of the landfill.', 'epif' ); ?> <mark>[OWNER NAMES]</mark> <?php esc_html_e( 'run EPIF.', 'epif' ); ?></p>
 			<p class="epif-ea-muted"><?php esc_html_e( 'Call or text', 'epif' ); ?> <?php echo $epif_tel; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped above. ?>, <?php esc_html_e( 'or email', 'epif' ); ?> <?php echo $epif_mail; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped above. ?>.</p>
 		</div>
 		<div class="epif-ea-photo"><?php esc_html_e( 'Photo goes here: the owners at a real job.', 'epif' ); ?></div>
@@ -141,7 +141,7 @@ $epif_spots = (int) apply_filters( 'epif_founding_spots', 25 );
 			<details><summary><?php esc_html_e( 'Who owns my scan?', 'epif' ); ?></summary><p><?php esc_html_e( 'The tenant agreement says so in plain language, and you will see it before you pay anything.', 'epif' ); ?></p></details>
 			<details><summary><?php esc_html_e( 'What about customers or staff who are in the store during a scan?', 'epif' ); ?></summary><p><?php esc_html_e( 'We agree on timing and signage with you before the scan, and the agreement covers anyone who appears in it.', 'epif' ); ?></p></details>
 			<details><summary><?php esc_html_e( 'Do shoppers need any equipment?', 'epif' ); ?></summary><p><?php esc_html_e( 'A modern phone or laptop with a browser should be enough. We will confirm that during testing.', 'epif' ); ?></p></details>
-			<details><summary><?php esc_html_e( 'Where is EPIF based?', 'epif' ); ?></summary><p><?php esc_html_e( 'Carroll County, Maryland.', 'epif' ); ?></p></details>
+			<details><summary><?php esc_html_e( 'Where is EPIF based?', 'epif' ); ?></summary><p><?php esc_html_e( 'Our headquarters is in Westminster, Maryland (Carroll County), and we serve the greater Baltimore area.', 'epif' ); ?></p></details>
 		</div>
 	</div>
 </section>

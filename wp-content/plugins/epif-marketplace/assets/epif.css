@@ -1,0 +1,1038 @@
+/* ==========================================================================
+   EPIF — Marketplace design system
+   Enjoy the Past, Improve the Future
+   --------------------------------------------------------------------------
+   Everything is scoped under .epif so it can't leak into the rest of the
+   theme. Change the brand in the :root block below and the whole page follows.
+   ========================================================================== */
+
+/* Fraunces (SIL OFL, assets/fonts/OFL-Fraunces.txt) — self-hosted variable font,
+   optical size and weight axes, Latin subset. */
+@font-face {
+	font-family: "Fraunces";
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url("fonts/fraunces-latin.woff2") format("woff2");
+}
+
+:root {
+	/* --- Brand colours -------------------------------------------------- */
+	--epif-ink:        #342E37; /* headings, body copy                     */
+	--epif-ink-soft:   #6B6670; /* secondary copy                          */
+	--epif-ink-faint:  #A6A1A8; /* labels, captions                        */
+	--epif-paper:      #FAF8F4; /* page background                         */
+	--epif-surface:    #FFFFFF; /* cards                                   */
+	--epif-line:       #E6E1D9; /* hairlines, card borders                 */
+
+	--epif-blue:       #3C91E6; /* primary action — buy, submit            */
+	--epif-blue-dark:  #2B72BC;
+	--epif-orange:     #FA824C; /* auctions, urgency, countdowns           */
+	--epif-orange-dk:  #E26530;
+	--epif-orange-bg:  #FDF1EA;
+	--epif-green:      #9FD356; /* tokens, impact, sustainability          */
+	--epif-green-dk:   #5D8A1F;
+	--epif-green-bg:   #F4FAE9;
+
+	/* --- Type ----------------------------------------------------------- */
+	--epif-font-display: "Fraunces", "Playfair Display", Georgia, "Times New Roman", serif;
+	--epif-font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	--epif-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+	/* --- Shape ---------------------------------------------------------- */
+	--epif-radius:     16px;
+	--epif-radius-sm:  10px;
+	--epif-shadow:     0 1px 2px rgba(52, 46, 55, .05), 0 8px 24px -12px rgba(52, 46, 55, .18);
+	--epif-shadow-lg:  0 2px 6px rgba(52, 46, 55, .06), 0 22px 48px -20px rgba(52, 46, 55, .28);
+}
+
+.epif :focus-visible {
+	outline: 3px solid var(--epif-blue);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+.epif,
+.epif * {
+	box-sizing: border-box;
+}
+
+.epif {
+	font-family: var(--epif-font-body);
+	color: var(--epif-ink);
+	line-height: 1.55;
+	-webkit-font-smoothing: antialiased;
+}
+
+.epif h1,
+.epif h2,
+.epif h3,
+.epif h4 {
+	font-family: var(--epif-font-display);
+	font-weight: 600;
+	line-height: 1.12;
+	letter-spacing: -0.015em;
+	color: var(--epif-ink);
+	margin: 0 0 .4em;
+}
+
+.epif h1 { font-size: clamp(2.4rem, 5.2vw, 4rem); }
+.epif h2 { font-size: clamp(1.7rem, 3.2vw, 2.5rem); }
+.epif h3 { font-size: 1.0625rem; letter-spacing: -0.005em; }
+
+.epif p { margin: 0 0 1em; }
+.epif p:last-child { margin-bottom: 0; }
+
+/* Section shells — .alignfull bands with a constrained inner column. */
+.epif-section {
+	padding: clamp(48px, 7vw, 96px) 24px;
+}
+.epif-section--paper  { background: var(--epif-paper); }
+.epif-section--white  { background: var(--epif-surface); }
+.epif-section--ink    { background: var(--epif-ink); color: #F3F0EC; }
+.epif-section--ink h2,
+.epif-section--ink h3 { color: #FFFFFF; }
+
+.epif-inner {
+	max-width: 1180px;
+	margin-inline: auto;
+}
+
+/* Little uppercase eyebrow label */
+.epif-eyebrow {
+	font-family: var(--epif-font-body);
+	font-size: .6875rem;
+	font-weight: 700;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+	color: var(--epif-ink-faint);
+	margin: 0 0 .75rem;
+}
+
+.epif-lede {
+	font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+	color: var(--epif-ink-soft);
+	max-width: 58ch;
+}
+
+/* Heading + "see all" row above a grid */
+.epif-sectionhead {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px 24px;
+	margin-bottom: 28px;
+}
+.epif-sectionhead h2 { margin-bottom: 0; }
+.epif-sectionhead__aside {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------------- */
+
+.epif-hero {
+	position: relative;
+	overflow: hidden;
+	background:
+		radial-gradient(120% 90% at 88% -10%, var(--epif-orange-bg) 0%, rgba(253, 241, 234, 0) 58%),
+		radial-gradient(90%  80% at -6% 105%, var(--epif-green-bg)  0%, rgba(244, 250, 233, 0) 60%),
+		var(--epif-paper);
+	padding: clamp(56px, 8vw, 112px) 24px clamp(48px, 6vw, 88px);
+	border-bottom: 1px solid var(--epif-line);
+}
+
+.epif-hero h1 { max-width: 16ch; }
+
+.epif-hero .epif-lede { margin-top: 4px; }
+
+/* Core search block, restyled. It's a real WordPress search form — point it
+   at the products archive once WooCommerce is in. */
+.epif-searchblock {
+	max-width: 580px;
+	margin: 30px 0 0;
+}
+.epif-searchblock .wp-block-search__inside-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 6px 6px 20px;
+	background: var(--epif-surface);
+	border: 1px solid var(--epif-line);
+	border-radius: 999px;
+	box-shadow: var(--epif-shadow);
+}
+.epif-searchblock .wp-block-search__input {
+	flex: 1;
+	min-width: 0;
+	border: 0;
+	outline: none;
+	background: transparent;
+	font: inherit;
+	font-size: .975rem;
+	color: var(--epif-ink);
+	padding: 10px 0;
+	border-radius: 0;
+}
+.epif-searchblock .wp-block-search__input::placeholder { color: var(--epif-ink-faint); }
+.epif-searchblock .wp-block-search__button {
+	flex: none;
+	border: 0;
+	background: var(--epif-ink);
+	color: #FFFFFF;
+	font-family: var(--epif-font-body);
+	font-size: .9rem;
+	font-weight: 600;
+	padding: 11px 22px;
+	border-radius: 999px;
+	cursor: pointer;
+	margin: 0;
+}
+.epif-searchblock .wp-block-search__button:hover { background: #221D24; }
+
+/* Stat strip under the hero copy */
+.epif-stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px 44px;
+	margin-top: 40px;
+	padding-top: 28px;
+	border-top: 1px solid var(--epif-line);
+}
+.epif-stat { min-width: 130px; }
+.epif-stat b {
+	display: block;
+	font-family: var(--epif-font-display);
+	font-size: 1.9rem;
+	font-weight: 600;
+	line-height: 1.05;
+	letter-spacing: -.02em;
+}
+.epif-stat span {
+	font-size: .8125rem;
+	color: var(--epif-ink-soft);
+}
+.epif-stat--green b { color: var(--epif-green-dk); }
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+
+.epif .wp-block-button__link,
+.epif .epif-btn {
+	display: inline-block;
+	font-family: var(--epif-font-body);
+	font-size: .9375rem;
+	font-weight: 600;
+	line-height: 1.2;
+	padding: 13px 24px;
+	border-radius: 999px;
+	border: 1.5px solid transparent;
+	text-decoration: none;
+	cursor: pointer;
+	transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+}
+.epif .wp-block-button__link:hover,
+.epif .epif-btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 6px 16px -6px rgba(52, 46, 55, .35);
+}
+
+/* Orange = auction / urgency */
+.epif .is-style-epif-bid .wp-block-button__link,
+.epif .epif-btn--bid {
+	background: var(--epif-orange);
+	color: #FFFFFF;
+}
+/* Blue = primary / commerce */
+.epif .is-style-epif-primary .wp-block-button__link,
+.epif .epif-btn--primary {
+	background: var(--epif-blue);
+	color: #FFFFFF;
+}
+/* Green = tokens / contribute */
+.epif .is-style-epif-token .wp-block-button__link,
+.epif .epif-btn--token {
+	background: var(--epif-green);
+	color: #23350B;
+}
+/* Outline = secondary */
+.epif .is-style-epif-ghost .wp-block-button__link,
+.epif .epif-btn--ghost {
+	background: transparent;
+	color: var(--epif-ink);
+	border-color: var(--epif-ink);
+}
+.epif-section--ink .epif-btn--ghost,
+.epif-section--ink .is-style-epif-ghost .wp-block-button__link {
+	color: #FFFFFF;
+	border-color: rgba(255, 255, 255, .55);
+}
+
+/* Quiet inline text link with an arrow */
+.epif-link {
+	font-size: .9375rem;
+	font-weight: 600;
+	color: var(--epif-blue);
+	text-decoration: none;
+	white-space: nowrap;
+}
+.epif-link:hover { color: var(--epif-blue-dark); text-decoration: underline; }
+
+/* --------------------------------------------------------------------------
+   Tags / chips
+   -------------------------------------------------------------------------- */
+
+.epif-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0 0 24px;
+	padding: 0;
+	list-style: none;
+}
+.epif-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: .8125rem;
+	font-weight: 600;
+	line-height: 1;
+	padding: 8px 14px;
+	border: 1.5px solid var(--epif-line);
+	border-radius: 999px;
+	background: var(--epif-surface);
+	color: var(--epif-ink-soft);
+	text-decoration: none;
+	white-space: nowrap;
+}
+.epif a.epif-tag:hover { border-color: var(--epif-ink); color: var(--epif-ink); }
+.epif-tag--on { background: var(--epif-ink); border-color: var(--epif-ink); color: #FFFFFF; }
+.epif-tag--live {
+	border-color: var(--epif-orange);
+	color: var(--epif-orange);
+	background: var(--epif-orange-bg);
+}
+.epif-tag--live::before {
+	content: "";
+	width: 7px; height: 7px;
+	border-radius: 50%;
+	background: var(--epif-orange);
+	animation: epif-pulse 1.8s ease-in-out infinite;
+}
+.epif-tag--token {
+	border-color: var(--epif-green);
+	color: var(--epif-green-dk);
+	background: var(--epif-green-bg);
+}
+.epif-tag--buy { border-color: var(--epif-blue); color: var(--epif-blue); background: #EDF4FD; }
+
+@keyframes epif-pulse {
+	0%, 100% { opacity: 1; transform: scale(1); }
+	50%      { opacity: .35; transform: scale(.8); }
+}
+@media (prefers-reduced-motion: reduce) {
+	.epif-tag--live::before { animation: none; }
+	.epif .wp-block-button__link:hover,
+	.epif .epif-btn:hover { transform: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Grids
+   -------------------------------------------------------------------------- */
+
+.epif-grid {
+	display: grid;
+	gap: 20px;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.epif-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.epif-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 1024px) {
+	.epif-grid    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.epif-grid--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+	.epif-grid,
+	.epif-grid--3,
+	.epif-grid--2 { grid-template-columns: minmax(0, 1fr); }
+
+	/* Product cards stay two-up on phones — a single column makes the page
+	   endless and doesn't match how anyone shops. */
+	.epif-grid--cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+	.epif-grid--cards .epif-card__body { padding: 12px 12px 14px; gap: 6px; }
+	.epif-grid--cards .epif-card__title { font-size: .875rem; }
+	.epif-grid--cards .epif-price { font-size: 1.125rem; }
+	.epif-grid--cards .epif-card__meta { flex-direction: column; align-items: flex-start; gap: 2px; }
+	.epif-grid--cards .epif-btn,
+	.epif-grid--cards .wp-block-button__link { font-size: .8125rem; padding: 9px 12px; }
+}
+@media (max-width: 380px) {
+	.epif-grid--cards { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --------------------------------------------------------------------------
+   Item cards
+   -------------------------------------------------------------------------- */
+
+.epif-card {
+	display: flex;
+	flex-direction: column;
+	background: var(--epif-surface);
+	border: 1px solid var(--epif-line);
+	border-radius: var(--epif-radius);
+	overflow: hidden;
+	box-shadow: var(--epif-shadow);
+	transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.epif-card:hover {
+	transform: translateY(-3px);
+	box-shadow: var(--epif-shadow-lg);
+	border-color: #D8D2C7;
+}
+
+.epif-card__media {
+	position: relative;
+	aspect-ratio: 4 / 3;
+	background: repeating-linear-gradient(135deg, #F1EEE8 0 12px, #ECE8E1 12px 24px);
+	overflow: hidden;
+}
+.epif-card__badges {
+	position: absolute;
+	top: 10px; left: 10px; right: 10px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	z-index: 2;
+}
+.epif-card__badges .epif-tag {
+	font-size: .6875rem;
+	padding: 5px 10px;
+	box-shadow: 0 1px 3px rgba(52, 46, 55, .12);
+	margin: 0;
+}
+
+/* The image block sits behind the badges and fills the media well. */
+.epif-card__media > .wp-block-image,
+.epif-card__media > figure {
+	position: absolute;
+	inset: 0;
+	margin: 0;
+	z-index: 1;
+}
+.epif-card__media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.epif-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 16px 16px 18px;
+	flex: 1;
+}
+.epif-card__body > * { margin: 0; }
+.epif-card__title {
+	font-family: var(--epif-font-body);
+	font-size: .975rem;
+	font-weight: 600;
+	line-height: 1.3;
+	margin: 0;
+	color: var(--epif-ink);
+}
+.epif-card__title a { color: inherit; text-decoration: none; }
+.epif-card__title a:hover { text-decoration: underline; }
+
+.epif-card__meta {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 10px;
+	margin: 0;
+	font-size: .8125rem;
+	color: var(--epif-ink-soft);
+}
+.epif-price {
+	font-family: var(--epif-font-display);
+	font-size: 1.375rem;
+	font-weight: 600;
+	letter-spacing: -.02em;
+	color: var(--epif-ink);
+}
+.epif-price--live { color: var(--epif-orange); }
+
+.epif-card__foot { margin-top: auto; padding-top: 4px; }
+.epif-card__foot .wp-block-button,
+.epif-card__foot .epif-btn { display: block; width: 100%; }
+.epif-card__foot .wp-block-button__link,
+.epif-card__foot .epif-btn { display: block; text-align: center; padding: 11px 16px; }
+
+/* Countdown — JS ticks these down; the initial text is the starting value */
+.epif-timer {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-family: var(--epif-font-mono);
+	font-size: .875rem;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	color: var(--epif-orange);
+	margin: 0;
+}
+.epif-timer::before {
+	content: "";
+	width: 12px; height: 12px;
+	border: 1.6px solid currentColor;
+	border-radius: 50%;
+	position: relative;
+	flex: none;
+}
+.epif-timer--urgent { color: #D9481C; }
+.epif-timer--ended { color: var(--epif-ink-faint); }
+
+/* "See all" tile that closes out a row */
+.epif-card--more {
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	gap: 6px;
+	padding: 28px 20px;
+	background: transparent;
+	border-style: dashed;
+	border-width: 1.5px;
+	box-shadow: none;
+	color: var(--epif-ink-soft);
+	text-decoration: none;
+}
+.epif-card--more:hover { border-color: var(--epif-ink); color: var(--epif-ink); }
+.epif-card--more b { font-size: 1.05rem; font-family: var(--epif-font-display); }
+.epif-card--more span { font-size: .8125rem; }
+
+/* --------------------------------------------------------------------------
+   Ending-soon band
+   -------------------------------------------------------------------------- */
+
+.epif-band {
+	background: linear-gradient(180deg, var(--epif-orange-bg) 0%, #FEF7F2 100%);
+	border-block: 1px solid #F3DDD0;
+}
+.epif-band .epif-card { border-color: #F1DACC; }
+
+/* --------------------------------------------------------------------------
+   How-it-works / feature cards
+   -------------------------------------------------------------------------- */
+
+.epif-step {
+	background: var(--epif-surface);
+	border: 1px solid var(--epif-line);
+	border-radius: var(--epif-radius);
+	padding: 26px 24px 28px;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.epif-step__num {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px; height: 34px;
+	border-radius: 50%;
+	font-family: var(--epif-font-display);
+	font-size: .95rem;
+	font-weight: 700;
+	background: var(--epif-ink);
+	color: #FFFFFF;
+	margin: 0 0 4px;
+}
+.epif-step h3 { font-size: 1.1875rem; font-family: var(--epif-font-display); margin: 0; }
+.epif-step p { color: var(--epif-ink-soft); font-size: .9375rem; margin: 0; }
+.epif-step p.epif-step__num { color: #FFFFFF; }
+.epif-step--accent { border-color: var(--epif-green); background: var(--epif-green-bg); }
+.epif-step--accent .epif-step__num { background: var(--epif-green-dk); }
+
+/* --------------------------------------------------------------------------
+   Contribute paths
+   -------------------------------------------------------------------------- */
+
+.epif-path {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	height: 100%;
+	padding: 24px 22px 26px;
+	background: var(--epif-surface);
+	border: 1px solid var(--epif-line);
+	border-radius: var(--epif-radius);
+	text-decoration: none;
+	color: inherit;
+	transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+.epif-path:hover {
+	border-color: var(--epif-orange);
+	transform: translateY(-3px);
+	box-shadow: var(--epif-shadow-lg);
+}
+.epif-path h3 { font-family: var(--epif-font-display); font-size: 1.1875rem; margin: 0; }
+.epif-path h3 a { color: inherit; text-decoration: none; }
+.epif-path:hover h3 a { text-decoration: underline; text-decoration-color: var(--epif-orange); }
+.epif-path p { font-size: .9rem; color: var(--epif-ink-soft); margin: 0; flex: 1; }
+.epif-path .epif-tag { align-self: flex-start; margin: 0; }
+.epif-path--featured { border-color: var(--epif-orange); background: var(--epif-orange-bg); }
+
+/* --------------------------------------------------------------------------
+   Growth tier bar
+   -------------------------------------------------------------------------- */
+
+.epif-tier {
+	display: flex;
+	align-items: flex-end;
+	gap: 10px;
+	margin: 24px 0 0;
+	padding: 0;
+	list-style: none;
+}
+.epif-tier li {
+	flex: 1;
+	text-align: center;
+	font-size: .8125rem;
+	font-weight: 600;
+	color: var(--epif-ink-faint);
+	border: 1.5px solid var(--epif-line);
+	border-radius: 12px 12px 4px 4px;
+	background: var(--epif-surface);
+	padding: 12px 6px;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+}
+.epif-tier li:nth-child(1) { min-height: 46px; }
+.epif-tier li:nth-child(2) { min-height: 62px; }
+.epif-tier li:nth-child(3) { min-height: 80px; }
+.epif-tier li:nth-child(4) { min-height: 100px; }
+.epif-tier li:nth-child(5) { min-height: 122px; }
+.epif-tier li.is-earned {
+	border-color: var(--epif-green);
+	background: var(--epif-green-bg);
+	color: var(--epif-green-dk);
+}
+@media (max-width: 600px) {
+	.epif-tier { flex-wrap: wrap; }
+	.epif-tier li { flex: 1 1 28%; min-height: 0 !important; }
+}
+
+/* --------------------------------------------------------------------------
+   Token / impact panel
+   -------------------------------------------------------------------------- */
+
+.epif-panel {
+	display: grid;
+	grid-template-columns: 1.15fr 1fr;
+	gap: clamp(24px, 4vw, 56px);
+	align-items: center;
+	padding: clamp(28px, 4vw, 48px);
+	background: var(--epif-green-bg);
+	border: 1px solid var(--epif-green);
+	border-radius: 24px;
+}
+@media (max-width: 860px) {
+	.epif-panel { grid-template-columns: minmax(0, 1fr); }
+}
+.epif-earnlist {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	background: var(--epif-surface);
+	border: 1px solid #DDEBC3;
+	border-radius: var(--epif-radius);
+	overflow: hidden;
+}
+.epif-earnlist li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 14px 18px;
+	font-size: .9375rem;
+	border-bottom: 1px solid #EDF3E2;
+}
+.epif-earnlist li:last-child { border-bottom: 0; }
+.epif-earnlist b {
+	font-family: var(--epif-font-mono);
+	font-size: .8125rem;
+	font-weight: 700;
+	color: var(--epif-green-dk);
+	background: var(--epif-green-bg);
+	border: 1.5px solid var(--epif-green);
+	border-radius: 999px;
+	padding: 4px 11px;
+	white-space: nowrap;
+}
+.epif-note {
+	font-size: .875rem;
+	color: var(--epif-ink-soft);
+	margin-top: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   Closing CTA
+   -------------------------------------------------------------------------- */
+
+.epif-cta { text-align: center; }
+.epif-cta .epif-lede {
+	margin-inline: auto;
+	color: rgba(243, 240, 236, .8);
+}
+.epif-cta .epif-buttons { justify-content: center; }
+
+.epif-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 28px;
+}
+
+/* --------------------------------------------------------------------------
+   Gutenberg housekeeping
+   -------------------------------------------------------------------------- */
+
+/* Full-width bands in classic themes that don't support alignfull. The plugin
+   only adds body.epif-classic-align when the active theme is a classic
+   (non-block) theme, so block themes keep their own handling. */
+body.epif-classic-align .epif.alignfull {
+	width: 100vw;
+	max-width: 100vw;
+	margin-left: calc(50% - 50vw);
+	margin-right: calc(50% - 50vw);
+}
+body.epif-classic-align { overflow-x: hidden; }
+
+/* WP's visually-hidden helper, in case the theme doesn't define it. */
+.epif .screen-reader-text {
+	position: absolute !important;
+	width: 1px; height: 1px;
+	padding: 0; margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+.epif-searchblock .screen-reader-text,
+.epif-searchblock label:not(.screen-reader-text) {
+	position: absolute !important;
+	width: 1px; height: 1px;
+	padding: 0; margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+}
+
+/* Buttons block inside our sections */
+.epif .wp-block-buttons { gap: 12px; }
+
+/* Keep the editor canvas honest — same look while you're editing. */
+.editor-styles-wrapper .epif-card:hover,
+.editor-styles-wrapper .epif-path:hover { transform: none; }
+
+/* --------------------------------------------------------------------------
+   Site header
+   Sticky, hairline-bottomed bar. The nav collapses to a wrapped row rather
+   than a hamburger — five items don't earn a disclosure widget, and a menu
+   that's always visible is one less thing to fail on a phone.
+   -------------------------------------------------------------------------- */
+
+.epif-header {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	background: rgba(250, 248, 244, .88);
+	backdrop-filter: saturate(180%) blur(12px);
+	-webkit-backdrop-filter: saturate(180%) blur(12px);
+	border-bottom: 1px solid var(--epif-line);
+	padding: 0 24px;
+}
+/* The admin bar would otherwise sit on top of the sticky header. */
+.admin-bar .epif-header { top: 32px; }
+@media (max-width: 782px) {
+	.admin-bar .epif-header { top: 46px; }
+}
+
+.epif-header__inner {
+	display: flex;
+	align-items: center;
+	gap: 10px 18px;
+	flex-wrap: wrap;
+	max-width: 1180px;
+	margin-inline: auto;
+	padding: 12px 0;
+}
+
+.epif-brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	text-decoration: none;
+	color: var(--epif-ink);
+	flex: none;
+}
+.epif-brand img,
+.epif-brand svg { width: 34px; height: 34px; display: block; flex: none; }
+.epif-brand__name {
+	font-family: var(--epif-font-display);
+	font-size: 1.25rem;
+	font-weight: 700;
+	letter-spacing: -.02em;
+	line-height: 1;
+}
+.epif-brand__tag {
+	display: block;
+	font-family: var(--epif-font-body);
+	font-size: .625rem;
+	font-weight: 600;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+	color: var(--epif-ink-faint);
+	margin-top: 3px;
+}
+
+.epif-nav {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 4px 6px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.epif-nav a {
+	display: block;
+	font-size: .9375rem;
+	font-weight: 600;
+	color: var(--epif-ink-soft);
+	text-decoration: none;
+	padding: 8px 11px;
+	border-radius: 999px;
+}
+.epif-nav a:hover { color: var(--epif-ink); background: rgba(52, 46, 55, .06); }
+.epif-nav a[aria-current="page"] {
+	color: var(--epif-ink);
+	box-shadow: inset 0 -2px 0 var(--epif-green);
+	border-radius: 4px;
+}
+
+/* Pushes everything after it to the right edge of the bar. */
+.epif-header__spacer { flex: 1 1 auto; min-width: 0; }
+
+.epif-header .epif-searchblock { max-width: 230px; margin: 0; flex: 0 1 230px; }
+.epif-header .epif-searchblock .wp-block-search__inside-wrapper {
+	padding: 3px 3px 3px 16px;
+	box-shadow: none;
+}
+.epif-header .epif-searchblock .wp-block-search__input { padding: 7px 0; font-size: .9rem; }
+.epif-header .epif-searchblock .wp-block-search__button { padding: 8px 16px; font-size: .8125rem; }
+
+.epif-header .epif-buttons { margin: 0; flex: none; }
+.epif-header .wp-block-button__link { padding: 10px 18px; font-size: .875rem; }
+
+/* Token balance chip — shown to signed-in members. Hide it until you have
+   real balances to put in it: add .epif-chip--hidden or delete the block. */
+.epif-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	flex: none;
+	font-family: var(--epif-font-mono);
+	font-size: .8125rem;
+	font-weight: 700;
+	color: var(--epif-green-dk);
+	background: var(--epif-green-bg);
+	border: 1.5px solid var(--epif-green);
+	border-radius: 999px;
+	padding: 7px 14px;
+	text-decoration: none;
+}
+.epif-chip:hover { background: #ECF6DA; }
+
+@media (max-width: 900px) {
+	.epif-header { position: static; }
+	.epif-header__inner { padding: 10px 0; gap: 8px 12px; }
+	.epif-header__spacer { display: none; }
+	.epif-header .epif-searchblock { max-width: none; flex: 1 1 100%; order: 3; }
+	.epif-nav { order: 4; flex: 1 1 100%; }
+	.epif-nav a { padding: 7px 10px; }
+	.epif-header .wp-block-button__link { padding: 9px 15px; font-size: .8125rem; }
+	.epif-chip { padding: 6px 11px; font-size: .75rem; }
+}
+
+/* On a phone the brand and the clear-out CTA are what matter; the balance
+   chip pushes the CTA onto its own row for no return. */
+@media (max-width: 560px) {
+	.epif-header .epif-chip { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   FAQ
+   -------------------------------------------------------------------------- */
+
+.epif-faq {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px 20px;
+	align-items: start;
+	margin-top: 32px;
+}
+@media (max-width: 780px) {
+	.epif-faq { grid-template-columns: minmax(0, 1fr); }
+}
+
+.epif-faq .wp-block-details {
+	background: var(--epif-surface);
+	border: 1px solid var(--epif-line);
+	border-radius: var(--epif-radius);
+	padding: 18px 20px;
+	margin: 0;
+	transition: border-color .16s ease;
+}
+.epif-faq .wp-block-details[open] { border-color: #D8D2C7; }
+.epif-faq summary {
+	font-family: var(--epif-font-body);
+	font-size: 1rem;
+	font-weight: 600;
+	color: var(--epif-ink);
+	cursor: pointer;
+	list-style: none;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+}
+.epif-faq summary::-webkit-details-marker { display: none; }
+.epif-faq summary::after {
+	content: "+";
+	flex: none;
+	font-family: var(--epif-font-mono);
+	font-size: 1.25rem;
+	line-height: 1;
+	color: var(--epif-ink-faint);
+	transition: transform .16s ease, color .16s ease;
+}
+.epif-faq .wp-block-details[open] summary::after {
+	content: "−";
+	color: var(--epif-orange);
+}
+.epif-faq .wp-block-details > :not(summary) {
+	font-size: .9375rem;
+	color: var(--epif-ink-soft);
+	margin: 12px 0 0;
+	max-width: 62ch;
+}
+
+/* --------------------------------------------------------------------------
+   Site footer
+   -------------------------------------------------------------------------- */
+
+.epif-footer {
+	background: var(--epif-ink);
+	color: rgba(243, 240, 236, .78);
+	padding: clamp(48px, 6vw, 76px) 24px 28px;
+	font-size: .9375rem;
+}
+.epif-footer a { color: rgba(243, 240, 236, .78); text-decoration: none; }
+.epif-footer a:hover { color: #FFFFFF; text-decoration: underline; }
+
+.epif-footer__top {
+	display: grid;
+	grid-template-columns: 1.6fr repeat(3, 1fr);
+	gap: 40px;
+	max-width: 1180px;
+	margin-inline: auto;
+	padding-bottom: 40px;
+	border-bottom: 1px solid rgba(243, 240, 236, .14);
+}
+@media (max-width: 900px) {
+	.epif-footer__top { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+	.epif-footer__brandcol { grid-column: 1 / -1; }
+}
+@media (max-width: 520px) {
+	.epif-footer__top { grid-template-columns: minmax(0, 1fr); }
+}
+
+.epif-footer__brandcol p {
+	max-width: 42ch;
+	margin: 14px 0 0;
+	color: rgba(243, 240, 236, .62);
+	font-size: .9375rem;
+	line-height: 1.6;
+}
+.epif-footer .epif-brand { color: #FFFFFF; }
+.epif-footer .epif-brand__tag { color: rgba(243, 240, 236, .5); }
+
+.epif-footer h2,
+.epif-footer__coltitle {
+	font-family: var(--epif-font-body);
+	font-size: .6875rem;
+	font-weight: 700;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+	color: rgba(243, 240, 236, .5);
+	margin: 0 0 14px;
+}
+
+.epif-footer ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+/* Selector matches .epif-footer__brandcol p, which would otherwise grey it out. */
+.epif-footer__brandcol p.epif-footer__impact,
+.epif-footer__impact {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 8px;
+	margin-top: 20px;
+	padding: 8px 14px;
+	border: 1.5px solid var(--epif-green);
+	border-radius: 999px;
+	color: var(--epif-green);
+	font-size: .8125rem;
+	font-weight: 600;
+}
+
+.epif-footer__bottom {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px 28px;
+	max-width: 1180px;
+	margin: 24px auto 0;
+	font-size: .8125rem;
+	color: rgba(243, 240, 236, .5);
+}
+/* Beats the column direction set on .epif-footer ul above. */
+.epif-footer ul.epif-footer__legal {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 8px 20px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
