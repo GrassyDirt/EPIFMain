@@ -52,12 +52,14 @@
 	color: var(--epif-ink);
 }
 
-.woocommerce :where(a:not(.button, .wp-element-button, .wc-block-components-button)),
+/* Links inside WooCommerce's own content only. WooCommerce puts .woocommerce on
+   <body>, so a bare .woocommerce a would restyle the EPIF header and cards. */
+.woocommerce :where(.woocommerce-breadcrumb, .product_meta, .woocommerce-tabs, .woocommerce-product-details__short-description, table.shop_table, .woocommerce-MyAccount-content, .woocommerce-info, .woocommerce-message, .woocommerce-error, .woocommerce-form, .woocommerce-privacy-policy-text, .woocommerce-terms-and-conditions-wrapper, .woocommerce-order) :where(a:not(.button, .wp-element-button, .wc-block-components-button)),
 .wc-block-components-totals-coupon-link,
 .wc-block-components-checkout-return-to-cart-button {
 	color: var(--epif-wc-buy);
 }
-.woocommerce :where(a:not(.button, .wp-element-button, .wc-block-components-button)):hover {
+.woocommerce :where(.woocommerce-breadcrumb, .product_meta, .woocommerce-tabs, .woocommerce-product-details__short-description, table.shop_table, .woocommerce-MyAccount-content, .woocommerce-info, .woocommerce-message, .woocommerce-error, .woocommerce-form, .woocommerce-privacy-policy-text, .woocommerce-terms-and-conditions-wrapper, .woocommerce-order) :where(a:not(.button, .wp-element-button, .wc-block-components-button)):hover {
 	color: var(--epif-ink);
 }
 
@@ -77,7 +79,6 @@
 .woocommerce button.button,
 .woocommerce input.button,
 .woocommerce #respond input#submit,
-.woocommerce .wp-element-button,
 .wc-block-components-button:not(.is-link),
 .wp-block-woocommerce-product-button .wp-block-button__link,
 .wc-block-grid__product-add-to-cart .wp-block-button__link,
@@ -116,7 +117,7 @@
 .woocommerce a.button.alt,
 .woocommerce button.button.alt,
 .woocommerce input.button.alt,
-.woocommerce a.add_to_cart_button,
+.woocommerce a.add_to_cart_button:not(.epif-btn),
 .woocommerce button.single_add_to_cart_button,
 .woocommerce a.checkout-button,
 .woocommerce #place_order,
@@ -133,7 +134,7 @@
 .woocommerce a.button.alt:hover,
 .woocommerce button.button.alt:hover,
 .woocommerce input.button.alt:hover,
-.woocommerce a.add_to_cart_button:hover,
+.woocommerce a.add_to_cart_button:not(.epif-btn):hover,
 .woocommerce button.single_add_to_cart_button:hover,
 .woocommerce a.checkout-button:hover,
 .woocommerce #place_order:hover,
@@ -227,6 +228,7 @@
 	display: block;
 	width: 100%;
 	aspect-ratio: 4 / 3;
+	height: auto;
 	object-fit: cover;
 	margin: 0 0 8px;
 	background: repeating-linear-gradient(135deg, #F1EEE8 0 12px, #ECE8E1 12px 24px);
@@ -401,6 +403,7 @@
 
 /* Tabs */
 .woocommerce div.product .woocommerce-tabs ul.tabs {
+	list-style: none;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px;
@@ -421,6 +424,7 @@
 }
 .woocommerce div.product .woocommerce-tabs ul.tabs li a {
 	display: block;
+	text-decoration: none;
 	padding: 8px 16px;
 	color: var(--epif-ink-soft);
 	font-size: .875rem;

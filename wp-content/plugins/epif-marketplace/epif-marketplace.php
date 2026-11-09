@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: EPIF Marketplace
- * Description: Landing page design system for EPIF — Enjoy the Past, Improve the Future. Registers the EPIF stylesheet, button block styles, auction countdown timers, the landing page block pattern and an EPIF skin for WooCommerce.
- * Version:     1.2.0
+ * Description: Landing page design system for EPIF — Enjoy the Past, Improve the Future. The EPIF storefront: design system, landing page, item browsing with filters, product page, header and footer, listing details on products, and an EPIF skin for WooCommerce.
+ * Version:     1.3.0
  * Author:      EPIF
  * License:     GPL-2.0-or-later
  * Text Domain: epif
@@ -12,9 +12,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EPIF_VERSION', '1.2.0' );
+define( 'EPIF_VERSION', '1.3.0' );
 define( 'EPIF_DIR', plugin_dir_path( __FILE__ ) );
 define( 'EPIF_URL', plugin_dir_url( __FILE__ ) );
+
+require_once EPIF_DIR . 'includes/class-epif-listing.php';
+require_once EPIF_DIR . 'includes/class-epif-store.php';
+
+EPIF_Listing::init();
+EPIF_Store::init();
 
 /**
  * Front-end assets. Fraunces is self-hosted (assets/fonts, SIL OFL) and declared

@@ -8,9 +8,9 @@
  * shows up in the header inserter rather than being buried in the page list.
  *
  * The nav is an HTML block on purpose. A five-item bar doesn't need
- * core/navigation's menu plumbing, and keeping it as plain markup means the
- * links point wherever you type — no menu screen round trip. Edit it with
- * "Edit as HTML" on the block.
+ * core/navigation's menu plumbing. Links point at the live store (shop,
+ * auctions) and the landing page sections. The cart link is a live EPIF block
+ * so its count stays current, and the search box searches products.
  *
  * @package epif
  */
@@ -21,14 +21,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $epif_mark = esc_url( EPIF_URL . 'assets/epif-mark.svg' );
 
+$epif_shop = EPIF_Store::shop_url();
+$epif_home = home_url( '/' );
+
 /**
- * Primary navigation. Point these at the real pages as you build them.
+ * Primary navigation.
  */
 $epif_nav = array(
-	'Auctions'     => '#',
-	'Shop'         => '#',
-	'How it works' => '#how-it-works',
-	'Work with us' => '#work-with-us',
+	'Shop'         => $epif_shop,
+	'Auctions'     => add_query_arg( array( 'listing' => 'auction', 'orderby' => 'ending' ), $epif_shop ),
+	'How it works' => $epif_home . '#how-it-works',
+	'Work with us' => $epif_home . '#work-with-us',
 );
 ?>
 <!-- wp:group {"align":"full","className":"epif epif-header","layout":{"type":"default"}} -->
@@ -52,18 +55,14 @@ $epif_nav = array(
 <div class="epif-header__spacer"></div>
 <!-- /wp:html -->
 
-<!-- wp:search {"label":"Search the marketplace","showLabel":false,"placeholder":"Search items…","buttonText":"Go","className":"epif-searchblock"} /-->
+<!-- wp:search {"label":"Search the marketplace","showLabel":false,"placeholder":"Search items…","buttonText":"Go","query":{"post_type":"product"},"className":"epif-searchblock"} /-->
 
-<!-- wp:html -->
-<!-- Token balance. Static until accounts exist — swap the number for a shortcode
-     once you have real balances, or delete this line to hide it entirely. -->
-<a class="epif-chip" href="#">1,240 tokens</a>
-<!-- /wp:html -->
+<!-- wp:epif/header-cart /-->
 
 <!-- wp:buttons {"className":"epif-buttons"} -->
 <div class="wp-block-buttons epif-buttons">
 <!-- wp:button {"className":"is-style-epif-bid"} -->
-<div class="wp-block-button is-style-epif-bid"><a class="wp-block-button__link wp-element-button" href="#">Book a clear-out</a></div>
+<div class="wp-block-button is-style-epif-bid"><a class="wp-block-button__link wp-element-button" href="<?php echo esc_url( $epif_home . '#book' ); ?>">Book a clear-out</a></div>
 <!-- /wp:button -->
 </div>
 <!-- /wp:buttons -->

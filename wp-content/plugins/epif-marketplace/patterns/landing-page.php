@@ -3,9 +3,10 @@
  * EPIF marketplace landing page pattern.
  *
  * Emitted as Gutenberg block markup so every heading, paragraph and button is
- * editable in the editor. The genuinely bespoke bits — the stat strip, chip
- * row, tier ladder and earn list — are HTML blocks, since no core block
- * produces that shape.
+ * editable in the editor. The item grids, hero stats, auction count and
+ * category chips are EPIF blocks that render live from WooCommerce, so they
+ * never show items that aren't for sale. The tier ladder and earn list are
+ * HTML blocks, since no core block produces that shape.
  *
  * @package epif
  */
@@ -14,59 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$epif_placeholder = esc_url( EPIF_URL . 'assets/item-placeholder.svg' );
-
-/**
- * Auctions in the "ending soon" band.
- * timer values are starting points — the front-end script ticks them down.
- */
-$epif_auctions = array(
-	array(
-		'title'  => 'Pyrex mixing bowl set, 4 pc',
-		'timer'  => '21:44',
-		'price'  => '$31',
-		'meta'   => '14 bids',
-		'bid'    => 'Bid $33',
-		'tokens' => '+25 tokens',
-	),
-	array(
-		'title'  => 'Impact wrench, corded',
-		'timer'  => '38:02',
-		'price'  => '$47',
-		'meta'   => '6 bids',
-		'bid'    => 'Bid $50',
-		'tokens' => '',
-	),
-	array(
-		'title'  => 'Alternator, 2012 Honda Civic',
-		'timer'  => '1h 12m',
-		'price'  => '$42',
-		'meta'   => '9 bids &middot; reserve met',
-		'bid'    => 'Bid $45',
-		'tokens' => '+30 tokens',
-	),
-	array(
-		'title'  => 'Trinitron CRT, 27 in',
-		'timer'  => '4h 03m',
-		'price'  => '$18',
-		'meta'   => '3 bids',
-		'bid'    => 'Bid $20',
-		'tokens' => '',
-	),
-);
-
-/**
- * Fixed-price listings.
- */
-$epif_products = array(
-	array( 'title' => 'Vintage Levi&#039;s 501, 34x32', 'price' => '$65', 'meta' => 'Ships in 2 days',        'tokens' => '+40 tokens' ),
-	array( 'title' => 'Lego bulk bin, 4.2 lb',          'price' => '$28', 'meta' => 'Warehouse pickup',      'tokens' => '' ),
-	array( 'title' => 'Kids winter coats, lot of 6',    'price' => '$34', 'meta' => 'Ships in 2 days',       'tokens' => '+15 tokens' ),
-	array( 'title' => 'Cast iron skillet, 10 in',       'price' => '$22', 'meta' => 'Seasoned, ready to use', 'tokens' => '' ),
-	array( 'title' => 'Mid-century side table, teak',   'price' => '$95', 'meta' => 'Local pickup only',     'tokens' => '+50 tokens' ),
-	array( 'title' => 'Craftsman socket set, 42 pc',    'price' => '$39', 'meta' => 'Complete, tested',      'tokens' => '' ),
-	array( 'title' => 'Vinyl LPs, jazz lot of 20',      'price' => '$48', 'meta' => 'Ships in 3 days',       'tokens' => '+20 tokens' ),
-);
+$epif_shop     = EPIF_Store::shop_url();
+$epif_auctions = add_query_arg( array( 'listing' => 'auction', 'orderby' => 'ending' ), $epif_shop );
+$epif_buy      = add_query_arg( 'listing', 'buy', $epif_shop );
+$epif_area     = EPIF_Store::setting( 'service_area' );
 
 /**
  * FAQ.
@@ -128,27 +80,20 @@ $epif_faq = array(
 <p class="epif-lede">EPIF recovers whole households, garages and estates before they hit the dumpster, then puts everything worth keeping back into circulation — at auction or straight up for sale. Bid on it, buy it, or hand us your own clear-out and earn tokens for what we save.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:search {"label":"Search","showLabel":false,"placeholder":"Search recovered parts, clothing, tools, home goods…","buttonText":"Search","className":"epif-searchblock"} /-->
+<!-- wp:search {"label":"Search","showLabel":false,"placeholder":"Search recovered parts, clothing, tools, home goods…","buttonText":"Search","query":{"post_type":"product"},"className":"epif-searchblock"} /-->
 
 <!-- wp:buttons {"className":"epif-buttons"} -->
 <div class="wp-block-buttons epif-buttons">
 <!-- wp:button {"className":"is-style-epif-bid"} -->
-<div class="wp-block-button is-style-epif-bid"><a class="wp-block-button__link wp-element-button" href="#">Browse live auctions</a></div>
+<div class="wp-block-button is-style-epif-bid"><a class="wp-block-button__link wp-element-button" href="<?php echo esc_url( $epif_auctions ); ?>">Browse live auctions</a></div>
 <!-- /wp:button -->
 <!-- wp:button {"className":"is-style-epif-ghost"} -->
-<div class="wp-block-button is-style-epif-ghost"><a class="wp-block-button__link wp-element-button" href="#">Book a free clear-out</a></div>
+<div class="wp-block-button is-style-epif-ghost"><a class="wp-block-button__link wp-element-button" href="#book">Book a free clear-out</a></div>
 <!-- /wp:button -->
 </div>
 <!-- /wp:buttons -->
 
-<!-- wp:html -->
-<div class="epif-stats">
-	<div class="epif-stat"><b>248</b><span>items listed right now</span></div>
-	<div class="epif-stat"><b>14</b><span>auctions closing today</span></div>
-	<div class="epif-stat epif-stat--green"><b>96 tons</b><span>kept out of landfill</span></div>
-	<div class="epif-stat"><b>Westminster, MD</b><span>pickup across the Baltimore area &amp; nationwide shipping</span></div>
-</div>
-<!-- /wp:html -->
+<!-- wp:epif/store-stats /-->
 
 </div>
 <!-- /wp:group -->
@@ -173,65 +118,11 @@ $epif_faq = array(
 <!-- /wp:heading -->
 </div>
 <!-- /wp:group -->
-<!-- wp:html -->
-<div class="epif-sectionhead__aside">
-	<span class="epif-tag epif-tag--live">14 live auctions</span>
-	<a class="epif-link" href="#">See every auction →</a>
-</div>
-<!-- /wp:html -->
+<!-- wp:epif/auction-summary /-->
 </div>
 <!-- /wp:group -->
 
-<!-- wp:group {"className":"epif-grid epif-grid--cards","layout":{"type":"default"}} -->
-<div class="wp-block-group epif-grid epif-grid--cards">
-<?php foreach ( $epif_auctions as $epif_item ) : ?>
-
-<!-- wp:group {"className":"epif-card","layout":{"type":"default"}} -->
-<div class="wp-block-group epif-card">
-<!-- wp:group {"className":"epif-card__media","layout":{"type":"default"}} -->
-<div class="wp-block-group epif-card__media">
-<!-- wp:image -->
-<figure class="wp-block-image"><img src="<?php echo $epif_placeholder; ?>" alt="<?php echo esc_attr( html_entity_decode( $epif_item['title'] ) ); ?>"/></figure>
-<!-- /wp:image -->
-<!-- wp:group {"className":"epif-card__badges","layout":{"type":"default"}} -->
-<div class="wp-block-group epif-card__badges">
-<!-- wp:paragraph {"className":"epif-tag epif-tag--live"} -->
-<p class="epif-tag epif-tag--live">Live</p>
-<!-- /wp:paragraph -->
-<?php if ( $epif_item['tokens'] ) : ?>
-<!-- wp:paragraph {"className":"epif-tag epif-tag--token"} -->
-<p class="epif-tag epif-tag--token"><?php echo $epif_item['tokens']; ?></p>
-<!-- /wp:paragraph -->
-<?php endif; ?>
-</div>
-<!-- /wp:group -->
-</div>
-<!-- /wp:group -->
-<!-- wp:group {"className":"epif-card__body","layout":{"type":"default"}} -->
-<div class="wp-block-group epif-card__body">
-<!-- wp:paragraph {"className":"epif-timer"} -->
-<p class="epif-timer"><?php echo $epif_item['timer']; ?></p>
-<!-- /wp:paragraph -->
-<!-- wp:heading {"level":3,"className":"epif-card__title"} -->
-<h3 class="wp-block-heading epif-card__title"><a href="#"><?php echo $epif_item['title']; ?></a></h3>
-<!-- /wp:heading -->
-<!-- wp:paragraph {"className":"epif-card__meta"} -->
-<p class="epif-card__meta"><span class="epif-price epif-price--live"><?php echo $epif_item['price']; ?></span> <span><?php echo $epif_item['meta']; ?></span></p>
-<!-- /wp:paragraph -->
-<!-- wp:buttons {"className":"epif-card__foot"} -->
-<div class="wp-block-buttons epif-card__foot">
-<!-- wp:button {"className":"is-style-epif-bid"} -->
-<div class="wp-block-button is-style-epif-bid"><a class="wp-block-button__link wp-element-button" href="#"><?php echo $epif_item['bid']; ?></a></div>
-<!-- /wp:button -->
-</div>
-<!-- /wp:buttons -->
-</div>
-<!-- /wp:group -->
-</div>
-<!-- /wp:group -->
-<?php endforeach; ?>
-</div>
-<!-- /wp:group -->
+<!-- wp:epif/products {"type":"auction","limit":4} /-->
 
 </div>
 <!-- /wp:group -->
@@ -257,79 +148,14 @@ $epif_faq = array(
 </div>
 <!-- /wp:group -->
 <!-- wp:html -->
-<div class="epif-sectionhead__aside"><a class="epif-link" href="#">Shop everything →</a></div>
+<div class="epif-sectionhead__aside"><a class="epif-link" href="<?php echo esc_url( $epif_shop ); ?>">Shop everything →</a></div>
 <!-- /wp:html -->
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-<div class="epif-tags">
-	<a class="epif-tag epif-tag--on" href="#">All</a>
-	<a class="epif-tag" href="#">Auto parts</a>
-	<a class="epif-tag" href="#">Tools</a>
-	<a class="epif-tag" href="#">Electronics</a>
-	<a class="epif-tag" href="#">Clothing</a>
-	<a class="epif-tag" href="#">Home &amp; kitchen</a>
-	<a class="epif-tag" href="#">Furniture</a>
-	<a class="epif-tag" href="#">Toys &amp; games</a>
-	<a class="epif-tag" href="#">Music &amp; media</a>
-</div>
-<!-- /wp:html -->
+<!-- wp:epif/category-chips /-->
 
-<!-- wp:group {"className":"epif-grid epif-grid--cards","layout":{"type":"default"}} -->
-<div class="wp-block-group epif-grid epif-grid--cards">
-<?php foreach ( $epif_products as $epif_item ) : ?>
-
-<!-- wp:group {"className":"epif-card","layout":{"type":"default"}} -->
-<div class="wp-block-group epif-card">
-<!-- wp:group {"className":"epif-card__media","layout":{"type":"default"}} -->
-<div class="wp-block-group epif-card__media">
-<!-- wp:image -->
-<figure class="wp-block-image"><img src="<?php echo $epif_placeholder; ?>" alt="<?php echo esc_attr( html_entity_decode( $epif_item['title'] ) ); ?>"/></figure>
-<!-- /wp:image -->
-<!-- wp:group {"className":"epif-card__badges","layout":{"type":"default"}} -->
-<div class="wp-block-group epif-card__badges">
-<!-- wp:paragraph {"className":"epif-tag epif-tag--buy"} -->
-<p class="epif-tag epif-tag--buy">Buy now</p>
-<!-- /wp:paragraph -->
-<?php if ( $epif_item['tokens'] ) : ?>
-<!-- wp:paragraph {"className":"epif-tag epif-tag--token"} -->
-<p class="epif-tag epif-tag--token"><?php echo $epif_item['tokens']; ?></p>
-<!-- /wp:paragraph -->
-<?php endif; ?>
-</div>
-<!-- /wp:group -->
-</div>
-<!-- /wp:group -->
-<!-- wp:group {"className":"epif-card__body","layout":{"type":"default"}} -->
-<div class="wp-block-group epif-card__body">
-<!-- wp:heading {"level":3,"className":"epif-card__title"} -->
-<h3 class="wp-block-heading epif-card__title"><a href="#"><?php echo $epif_item['title']; ?></a></h3>
-<!-- /wp:heading -->
-<!-- wp:paragraph {"className":"epif-card__meta"} -->
-<p class="epif-card__meta"><span class="epif-price"><?php echo $epif_item['price']; ?></span> <span><?php echo $epif_item['meta']; ?></span></p>
-<!-- /wp:paragraph -->
-<!-- wp:buttons {"className":"epif-card__foot"} -->
-<div class="wp-block-buttons epif-card__foot">
-<!-- wp:button {"className":"is-style-epif-primary"} -->
-<div class="wp-block-button is-style-epif-primary"><a class="wp-block-button__link wp-element-button" href="#">Buy it now</a></div>
-<!-- /wp:button -->
-</div>
-<!-- /wp:buttons -->
-</div>
-<!-- /wp:group -->
-</div>
-<!-- /wp:group -->
-<?php endforeach; ?>
-
-<!-- wp:html -->
-<a class="epif-card epif-card--more" href="#">
-	<b>232 more items</b>
-	<span>Browse the full marketplace →</span>
-</a>
-<!-- /wp:html -->
-</div>
-<!-- /wp:group -->
+<!-- wp:epif/products {"type":"buy","limit":7,"more":true} /-->
 
 </div>
 <!-- /wp:group -->
@@ -412,8 +238,8 @@ $epif_faq = array(
 <!-- /wp:group -->
 
 
-<!-- wp:group {"align":"full","className":"epif epif-section epif-section--white","layout":{"type":"default"}} -->
-<div class="wp-block-group alignfull epif epif-section epif-section--white">
+<!-- wp:group {"align":"full","anchor":"tokens","className":"epif epif-section epif-section--white","layout":{"type":"default"}} -->
+<div id="tokens" class="wp-block-group alignfull epif epif-section epif-section--white">
 <!-- wp:group {"className":"epif-inner","layout":{"type":"default"}} -->
 <div class="wp-block-group epif-inner">
 
@@ -446,10 +272,10 @@ $epif_faq = array(
 <!-- wp:buttons {"className":"epif-buttons"} -->
 <div class="wp-block-buttons epif-buttons">
 <!-- wp:button {"className":"is-style-epif-token"} -->
-<div class="wp-block-button is-style-epif-token"><a class="wp-block-button__link wp-element-button" href="#">Start earning tokens</a></div>
+<div class="wp-block-button is-style-epif-token"><a class="wp-block-button__link wp-element-button" href="#book">Start earning tokens</a></div>
 <!-- /wp:button -->
 <!-- wp:button {"className":"is-style-epif-ghost"} -->
-<div class="wp-block-button is-style-epif-ghost"><a class="wp-block-button__link wp-element-button" href="#">How tokens work</a></div>
+<div class="wp-block-button is-style-epif-ghost"><a class="wp-block-button__link wp-element-button" href="#faq">How tokens work</a></div>
 <!-- /wp:button -->
 </div>
 <!-- /wp:buttons -->
@@ -478,7 +304,7 @@ $epif_faq = array(
 </div>
 <!-- /wp:group -->
 <!-- wp:html -->
-<div class="epif-sectionhead__aside"><a class="epif-link" href="#">Talk to a person →</a></div>
+<div class="epif-sectionhead__aside"><a class="epif-link" href="#book">Talk to a person →</a></div>
 <!-- /wp:html -->
 </div>
 <!-- /wp:group -->
@@ -489,7 +315,7 @@ $epif_faq = array(
 <!-- wp:group {"className":"epif-path epif-path--featured","layout":{"type":"default"}} -->
 <div class="wp-block-group epif-path epif-path--featured">
 <!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading"><a href="#">Have us clear it out</a></h3>
+<h3 class="wp-block-heading"><a href="#book">Have us clear it out</a></h3>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
 <p>We haul, sort, photograph and appraise it. Anything with life left gets sold here — you get tokens and the diversion stats on your profile.</p>
@@ -503,7 +329,7 @@ $epif_faq = array(
 <!-- wp:group {"className":"epif-path","layout":{"type":"default"}} -->
 <div class="wp-block-group epif-path">
 <!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading"><a href="#">Have us list your inventory</a></h3>
+<h3 class="wp-block-heading"><a href="#book">Have us list your inventory</a></h3>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
 <p>Already have stock but no time to list it? We photograph, write and list it on the EPIF marketplace and eBay for a flat fee.</p>
@@ -517,7 +343,7 @@ $epif_faq = array(
 <!-- wp:group {"className":"epif-path","layout":{"type":"default"}} -->
 <div class="wp-block-group epif-path">
 <!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading"><a href="#">Source inventory from us</a></h3>
+<h3 class="wp-block-heading"><a href="#book">Source inventory from us</a></h3>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
 <p>Buy recovered goods by the pallet or the lot for your own shop, booth or resale channel. Sorted, graded and ready to move.</p>
@@ -531,7 +357,7 @@ $epif_faq = array(
 <!-- wp:group {"className":"epif-path","layout":{"type":"default"}} -->
 <div class="wp-block-group epif-path">
 <!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading"><a href="#">Partner as a fulfillment center</a></h3>
+<h3 class="wp-block-heading"><a href="#book">Partner as a fulfillment center</a></h3>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
 <p>Have warehouse space sitting idle? Hold and ship network inventory out of your building and earn on every order.</p>
@@ -544,6 +370,44 @@ $epif_faq = array(
 
 </div>
 <!-- /wp:group -->
+
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+
+
+<!-- wp:group {"align":"full","anchor":"book","className":"epif epif-section epif-section--white epif-book","layout":{"type":"default"}} -->
+<div id="book" class="wp-block-group alignfull epif epif-section epif-section--white epif-book">
+<!-- wp:group {"className":"epif-inner epif-book__inner","layout":{"type":"default"}} -->
+<div class="wp-block-group epif-inner epif-book__inner">
+
+<!-- wp:group {"className":"epif-book__intro","layout":{"type":"default"}} -->
+<div class="wp-block-group epif-book__intro">
+<!-- wp:paragraph {"className":"epif-eyebrow"} -->
+<p class="epif-eyebrow">Book a clear-out</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Tell us what you've got.</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"epif-lede"} -->
+<p class="epif-lede">We're based in Westminster, MD and work across <?php echo esc_html( $epif_area ); ?>. A person reads every request and gets back to you with a pickup date and an honest read on what's worth selling.</p>
+<!-- /wp:paragraph -->
+<!-- wp:list {"className":"epif-checklist"} -->
+<ul class="wp-block-list epif-checklist"><!-- wp:list-item -->
+<li>Free pickup when the load is mostly resale</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>Photos help: a few phone snaps of each room is plenty</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>No obligation — we'll tell you up front if it's mostly disposal</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:epif/booking-form /-->
 
 </div>
 <!-- /wp:group -->
@@ -601,10 +465,10 @@ $epif_faq = array(
 <!-- wp:buttons {"className":"epif-buttons"} -->
 <div class="wp-block-buttons epif-buttons">
 <!-- wp:button {"className":"is-style-epif-token"} -->
-<div class="wp-block-button is-style-epif-token"><a class="wp-block-button__link wp-element-button" href="#">Request a free pickup</a></div>
+<div class="wp-block-button is-style-epif-token"><a class="wp-block-button__link wp-element-button" href="#book">Request a free pickup</a></div>
 <!-- /wp:button -->
 <!-- wp:button {"className":"is-style-epif-ghost"} -->
-<div class="wp-block-button is-style-epif-ghost"><a class="wp-block-button__link wp-element-button" href="#">See what we take</a></div>
+<div class="wp-block-button is-style-epif-ghost"><a class="wp-block-button__link wp-element-button" href="#faq">See what we take</a></div>
 <!-- /wp:button -->
 </div>
 <!-- /wp:buttons -->

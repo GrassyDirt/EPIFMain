@@ -7,15 +7,15 @@ epifservices.com — WordPress site.
 | --- | --- |
 | `wp-content/mu-plugins/epif-core.php` + `epif-core/` | Always-on site backend: coming-soon mode, newsletter signups (**Subscribers**), lead capture (**Leads**), **Settings → EPIF Business Info**, legal pages, security + performance defaults. |
 | `wp-content/mu-plugins/epif-core/legal/` | Draft Privacy Policy, Terms of Use, Cookie Policy, Accessibility Statement. |
-| `wp-content/plugins/epif-marketplace/` | EPIF brand design system from the EPIFsiterepo project: logo mark, colours, Fraunces type, marketplace landing page, site header and footer patterns (Patterns → EPIF), and an EPIF skin for WooCommerce that works with any theme. See its README. |
-| `wp-content/themes/epif/` | Child theme of Twenty Twenty-Five: coming-soon page, site footer, **Landing Page** template, EPIF block patterns. |
+| `wp-content/plugins/epif-marketplace/` | The EPIF storefront: design system (from the EPIFsiterepo project), landing page, item browsing with filters, product page, header/footer, listing details on products (condition, shipping/pickup, tokens, auction end), **Settings → EPIF Store**, and an EPIF skin for WooCommerce. See its README. |
+| `wp-content/themes/epif/` | Child theme of Twenty Twenty-Five: page templates for the store (front page, shop/category/search, product, cart, checkout, pages), EPIF header and footer, coming-soon page, **Landing Page** template, EPIF block patterns. |
 | `wp-config.php` | EPIF-tuned settings. Secrets are loaded from `wp-config-local.php` (never committed). |
 
 ## Server setup
 
 1. Copy `wp-config-local-sample.php` to `wp-config-local.php` — preferably one directory **above** the web root — and fill in the DB credentials and fresh salts from https://api.wordpress.org/secret-key/1.1/salt/.
    `wp-config.php` refuses to boot (HTTP 503) if this file is missing.
-2. Dashboard → Appearance → Themes → activate **EPIF**, then Plugins → activate **EPIF Marketplace**.
+2. Dashboard → Appearance → Themes → activate **EPIF**, then Plugins → activate **WooCommerce** and **EPIF Marketplace**. In **Settings → EPIF Store**, check the pickup location and service area, and add a landfill-diversion figure only if you have a real one.
 3. **Settings → EPIF Business Info**: fill in the legal name, contact email, mailing address, governing law, and effective date. The footer, legal pages, and emails all read from here.
 4. Configure **GoSMTP** so newsletter confirmation and lead emails are delivered. Send yourself a test signup.
 5. **Pages**: review the legal drafts (a dashboard notice links to them), have them checked by a lawyer, then publish. Links appear in the footer once each page is published. Publish the Privacy Policy before promoting the signup form.
@@ -33,6 +33,12 @@ epifservices.com — WordPress site.
 ## Branding and service area
 
 EPIF is headquartered in **Westminster, MD** and serves **Carroll County and the Baltimore area**. The brand comes from the EPIF Marketplace plugin: ink `#342E37`, paper `#FAF8F4`, blue `#3C91E6` (`#2B72BC` for text and buttons, for contrast), orange `#FA824C` (auctions), green `#9FD356` (tokens/impact). The theme's colour palette uses the same values, and the EPIF mark is the browser-tab icon until a Site Icon is set.
+
+## Store
+
+The home page, shop, categories, search results, product pages, cart and checkout all use the EPIF design. Items, counts and categories come live from WooCommerce. Set each product's condition, shipping/pickup, tokens and (for auctions) end time under **Product data → General → EPIF listing**.
+Auctions show a countdown and are listed under *Live auctions*, but **bidding isn't built in**: a live auction can't be added to the cart, and the product page asks buyers to send their bid through the clear-out form (it lands in **Leads**). Online bidding needs an auction plugin; see `wp-content/plugins/epif-marketplace/README.md`.
+Before launch, review the landing page FAQ and the tokens section. The tokens programme it describes isn't running on the site yet.
 
 ## Coming-soon mode
 

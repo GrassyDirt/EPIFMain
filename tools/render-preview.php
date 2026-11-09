@@ -8,8 +8,10 @@
  *
  *     php tools/render-preview.php > full-preview.html
  *
- * It stubs the few WordPress functions the patterns call and stands in a
- * static form for the dynamic core/search block.
+ * It stubs the few WordPress functions the patterns call, stands in a static
+ * form for the dynamic core/search block, and shows a labelled placeholder for
+ * each live epif/* block (item grids, stats, booking form), which need
+ * WordPress and WooCommerce to render.
  */
 
 define( 'ABSPATH', true );
@@ -20,6 +22,16 @@ function esc_html( $s ) { return htmlspecialchars( $s, ENT_QUOTES, 'UTF-8' ); }
 function esc_attr( $s ) { return htmlspecialchars( $s, ENT_QUOTES, 'UTF-8' ); }
 function esc_url( $s )  { return htmlspecialchars( $s, ENT_QUOTES, 'UTF-8' ); }
 function home_url( $p = '/' ) { return '#'; }
+function add_query_arg( $args, $url = '' ) { return '#'; }
+
+// Stand-in for the plugin's store class; live data needs WordPress.
+class EPIF_Store {
+	public static function shop_url() { return '#'; }
+	public static function setting( $key ) {
+		$values = array( 'pickup_location' => 'Westminster, MD', 'service_area' => 'Carroll County and the Baltimore area', 'diverted' => '' );
+		return $values[ $key ] ?? '';
+	}
+}
 
 function epif_part( $slug ) {
 	ob_start();
@@ -48,6 +60,15 @@ $html = preg_replace_callback(
 			. '</div></form></div>';
 	},
 	$parts
+);
+
+// EPIF blocks render live store data inside WordPress; show where each one goes.
+$html = preg_replace_callback(
+	'/<!--\s*wp:epif\/([a-z-]+)[^>]*?\/-->/',
+	function ( $m ) {
+		return '<div class="epif-empty"><p class="epif-empty__title">Live block: epif/' . $m[1] . '</p><p>Renders from WooCommerce inside WordPress.</p></div>';
+	},
+	$html
 );
 
 // Strip the remaining Gutenberg block delimiters — what's left is the HTML
